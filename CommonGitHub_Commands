@@ -1,0 +1,12 @@
+To push new edits:
+1. Do "git status"
+2. Do "Git add ."
+3. Do "git status"
+4. Do "git commit -m 'description' "
+5. Do "git push origin master"
+
+Before you make changes:
+1. Go to main project folder
+2. Do a git pull on master branch
+3. Do a git checkout
+4. Do a git merge master
