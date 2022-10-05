@@ -3,7 +3,6 @@ This is a common utility for containing all music-specific mathematical operatio
 Please include docstrings and use clear naming conventions, as other group members will likely be reüsing your methods.
 """
 from numpy import log2, round
-import time
 
 def closest_note(freq):
 	"""
