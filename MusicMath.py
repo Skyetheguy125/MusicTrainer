@@ -3,6 +3,7 @@ This is a common utility for containing all music-specific mathematical operatio
 Please include docstrings and use clear naming conventions, as other group members will likely be reüsing your methods.
 """
 from numpy import log2, round
+import time
 
 def closest_note(freq):
 	"""
@@ -27,20 +28,18 @@ def note_lookup(note):
 	note - reference note as an integer number of semitones above A440
 	returns the name of the note as a string. X-sharp -> X#, X-flat -> Xb
 	"""
-	LUT = {
-		0:	"A",
-		1:	"A#/Bb",
-		2:	"B",
-		3:	"C",
-		4:	"C#/Db",
-		5:	"D",
-		6:	"D#/Eb",
-		7:	"E",
-		8:	"F",
-		9:	"F#/Gb",
-		10:	"G",
-		11:	"G#/Ab"
-	}
+	LUT = ["A",	#0
+		"A#/Bb",	#1
+		"B",	#2
+		"C",	#3
+		"C#/Db",	#4
+		"D",	#5
+		"D#/Eb",	#6
+		"E",	#7
+		"F",	#8
+		"F#/Gb",	#9
+		"G",	#10
+		"G#/Ab"]	#11
 	return LUT[note%12]
 
 if __name__=="__main__":
