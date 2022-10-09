@@ -4,7 +4,7 @@ from tkinter.ttk import *
 
 # creating main tkinter window/toplevel
 master = Tk()
-master.geometry('320x150')
+master.geometry('800x480')
 master.title('Front Demo')
 # topFrame = Frame(master)
 # topFrame.pack()
@@ -33,11 +33,11 @@ l2.grid(row = 2, column = 0, sticky = W, pady = 2)
 
 # adding image (remember image should be PNG and not JPG)
 img = PhotoImage(file = r"./tkinder/Testing_Files/Staff.png")
-img1 = img.subsample(2, 2)
+img1 = img.zoom(1, 1)
 
 # setting image with the help of label
 Label(master, image = img1).grid(row = 0, column = 2,
-	columnspan = 3, rowspan = 2, padx = 5, pady = 5)
+	columnspan = 4, rowspan = 2, padx = 5, pady = 5)
 
 # button widget
 b1 = Button(master, text = "Tuner")
@@ -47,7 +47,7 @@ b3 = Button(master, text = "Statistics")
 # arranging button widgets
 b1.grid(row = 5, column = 2, sticky = E)
 b2.grid(row = 5, column = 3, sticky = E)
-b3.grid(row = 5, column = 4, sticky = E)
+b3.grid(row = 5, column = 5, sticky = E)
 
 # infinite loop which can be terminated
 # by keyboard or mouse interrupt
