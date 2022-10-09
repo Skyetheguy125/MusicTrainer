@@ -4,15 +4,20 @@ from tkinter.ttk import *
 
 # creating main tkinter window/toplevel
 master = Tk()
-
+master.geometry('320x150')
+master.title('Front Demo')
+# topFrame = Frame(master)
+# topFrame.pack()
+# bottomFrame = Frame(master)
+# bottomFrame.pack(side=BOTTOM)
 # this will create a label widget
-# l1 = Label(master, text = "Height")
-# l2 = Label(master, text = "Width")
+l1 = Label(master, text = "")
+l2 = Label(master, text = "")
 
 # # grid method to arrange labels in respective
 # # rows and columns as specified
-# l1.grid(row = 0, column = 0, sticky = W, pady = 2)
-# l2.grid(row = 1, column = 0, sticky = W, pady = 2)
+l1.grid(row = 1, column = 0, sticky = W, pady = 2)
+l2.grid(row = 2, column = 0, sticky = W, pady = 2)
 
 # # entry widgets, used to take entry from user
 # e1 = Entry(master)
@@ -40,9 +45,9 @@ b2 = Button(master, text = "Trainer")
 b3 = Button(master, text = "Statistics")
 
 # arranging button widgets
-b1.grid(row = 2, column = 2, sticky = E)
-b2.grid(row = 2, column = 3, sticky = E)
-b3.grid(row = 2, column = 4, sticky = E)
+b1.grid(row = 5, column = 2, sticky = E)
+b2.grid(row = 5, column = 3, sticky = E)
+b3.grid(row = 5, column = 4, sticky = E)
 
 # infinite loop which can be terminated
 # by keyboard or mouse interrupt
