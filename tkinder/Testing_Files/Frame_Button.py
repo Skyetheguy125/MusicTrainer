@@ -1,6 +1,5 @@
 # import tkinter module
 from tkinter import *
-from tkinter.ttk import *
 
 # creating main tkinter window/toplevel
 master = Tk()
@@ -32,8 +31,7 @@ l2.grid(row = 2, column = 0, sticky = W, pady = 2)
 # c1.grid(row = 2, column = 0, sticky = W, columnspan = 2)
 
 # adding image (remember image should be PNG and not JPG)
-img = PhotoImage(file = r"./tkinder/Testing_Files/Staff.png")
-img1 = img.zoom(1, 1)
+img1 = PhotoImage(file = r"./tkinder/Testing_Files/Staff.png")
 
 # setting image with the help of label
 Label(master, image = img1).grid(row = 0, column = 2,
