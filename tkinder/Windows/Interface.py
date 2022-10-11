@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter.ttk as tk
-from PIL import ImageTk, Image
+# from PIL import ImageTk, Image
 
 def create_page(window):
     #Create rows and collumn
@@ -45,7 +45,7 @@ def create_home_window():
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
-    bg = PhotoImage(file='images/tamu_background.png')
+    bg = PhotoImage(file=r"./tkinder/Windows/images/tamu_background.png")
     my_label = Label(root,image=bg)
     my_label.place(x=0, y=0, relwidth=1, relheight=1)
 
@@ -56,7 +56,7 @@ def create_home_window():
     header.grid(row=1,column=3,columnspan=2)
     
     #adds in temporary image and text
-    my_file = 'images/sample2.png'
+    my_file = r"./tkinder/Windows/images/sample2.png"
     my_image = PhotoImage(file =my_file)
     image1 = Label(root,image=my_image)
     image1.grid(row=2,column=3)
@@ -85,7 +85,7 @@ def create_trainer_window():
     trainer_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
-    bg = PhotoImage(file='images/tamu_background.png')
+    bg = PhotoImage(file=r"./tkinder/Windows/images/tamu_background.png")
     my_label = Label(trainer_window,image=bg)
     my_label.place(x=0, y=0, relwidth=1, relheight=1)
     
@@ -96,7 +96,7 @@ def create_trainer_window():
     header.grid(row=1,column=3,columnspan=2)
     
     #adds in temporary image and text
-    my_file = 'images/train_icon.png'
+    my_file = r"./tkinder/Windows/images/train_icon.png"
     my_image = PhotoImage(file =my_file)
     image1 = Label(trainer_window,image=my_image)
     image1.grid(row=2,column=3)
@@ -127,7 +127,7 @@ def create_stats_window():
     stats_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
-    bg = PhotoImage(file='images/tamu_background.png')
+    bg = PhotoImage(file=r"./tkinder/Windows/images/tamu_background.png")
     my_label = Label(stats_window,image=bg)
     my_label.place(x=0, y=0, relwidth=1, relheight=1)
     
@@ -137,7 +137,7 @@ def create_stats_window():
     header.grid(row=1,column=3,columnspan=2)
     
     #add image
-    my_file = 'images/stat_icon.png'
+    my_file = r"./tkinder/Windows/images/stat_icon.png"
     my_image = PhotoImage(file =my_file)
     image1 = Label(stats_window,image=my_image)
     image1.grid(row=2,column=3)
