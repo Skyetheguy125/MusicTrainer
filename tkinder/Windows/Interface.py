@@ -9,6 +9,8 @@ def create_home_window():
             stats_window.destroy()
         except TclError as x:
             pass
+    except NameError:
+        pass
 
     global root
     
