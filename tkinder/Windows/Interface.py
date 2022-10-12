@@ -27,7 +27,9 @@ def create_textboxes(window):
     t3_label = Label(window,text='Alto:',width=11,bg='lavender').grid(row=3,column=5,pady=3,columnspan=2)
     t3 = Text(window,height=1,width=10).grid(row=4,column=5,columnspan=2)
 
+
 def create_home_window():
+    
     #destroys other windows if open
     try:
         trainer_window.destroy()
@@ -113,6 +115,24 @@ def create_trainer_window():
     trainer_window.mainloop()
        
 def create_stats_window():
+      
+    def change_image_today():
+       new_img=ImageTk.PhotoImage(Image.open("images/TODAY.png"))
+       image1.configure(image=new_img)
+       image1.image=new_img
+       
+    def change_image_week():
+       new_img=ImageTk.PhotoImage(Image.open("images/WEEK.png"))
+       image1.configure(image=new_img)
+       image1.image=new_img
+       
+    def change_image_month():
+       new_img=ImageTk.PhotoImage(Image.open("images/MONTH.png"))
+       image1.configure(image=new_img)
+       image1.image=new_img
+       
+       
+    
     #destroys other windows if open
     try:
         root.destroy()
@@ -145,11 +165,11 @@ def create_stats_window():
     image_label.grid(row=2,column=4)  
     
     #Create Progress Buttons
-    b1 = Button(stats_window,text='TODAY',width=12,pady=10,bg='light green',font='bold')
+    b1 = Button(stats_window,text='TODAY',width=12,pady=10,bg='light green',font='bold',command=change_image_today)
     b1.grid(row=4,column=1,columnspan=2,padx=20,pady=20)
-    b2 = Button(stats_window,text='WEEK',width=12,pady=10,bg='light blue',font='bold')
+    b2 = Button(stats_window,text='WEEK',width=12,pady=10,bg='light blue',font='bold',command=change_image_week)
     b2.grid(row=4,column=3,padx=20,pady=20)
-    b3 = Button(stats_window,text='MONTH',width=12,pady=10,bg='lavender',font='bold')
+    b3 = Button(stats_window,text='MONTH',width=12,pady=10,bg='lavender',font='bold',command=change_image_month)
     b3.grid(row=4,column=5,columnspan=2,padx=20,pady=20)
     
     #Add Tuner and Trainer Button functionality
