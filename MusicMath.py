@@ -3,6 +3,7 @@ This is a common utility for containing all music-specific mathematical operatio
 Please include docstrings and use clear naming conventions, as other group members will likely be reüsing your methods.
 """
 from numpy import log2, round
+from math import floor
 
 def closest_note(freq):
 	"""
@@ -22,9 +23,17 @@ def cent_deviation(freq, note):
 	c = (12*log2(freq/440)-note)*100
 	return c
 
-def note_lookup(note):
+def octave(note):
 	"""
 	note - reference note as an integer number of semitones above A440
+	Returns the octave number of the note in Scientific Pitch Notation
+	"""
+	return floor((note+69)/12)-1
+
+def note_lookup(note, *, oct=False):
+	"""
+	note - reference note as an integer number of semitones above A440
+	oct (keyword-only) - Enable octave mode (disabled by default)
 	returns the name of the note as a string. X-sharp -> X#, X-flat -> Xb
 	"""
 	LUT = ["A",	#0
@@ -39,7 +48,10 @@ def note_lookup(note):
 		"F#/Gb",	#9
 		"G",	#10
 		"G#/Ab"]	#11
-	return LUT[note%12]
+	if not oct:	
+		return LUT[note%12]
+	else:
+		return LUT[note%12]+str(octave(note))
 
 if __name__=="__main__":
 	print("Music & Math")
