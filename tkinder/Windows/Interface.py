@@ -179,4 +179,4 @@ def create_stats_window():
     stats_window.mainloop()
 
 if __name__=="__main__": #only run program immediately if called as a script
-    create_home_window() #Start program
+    create_home_window(ProtectedBuffer()) #Start program
