@@ -3,6 +3,7 @@ This is a scaffold main script for running GUI threads alongside scaffolded Sign
 """
 import threading
 from SignalProcessorScaffold import SigProcessorScaffold as sp
+import tkinder.Windows.Interface as Interface
 
 class ProtectedBuffer:
 	"""
@@ -33,18 +34,18 @@ class ProtectedBuffer:
 
 #Construct global ProtectedBuffer to use for inter-thread communication
 buffer = ProtectedBuffer()
+kill_signal = ProtectedBuffer()
+kill_signal.set(-1.0)
 
 #Function for the signal thread; simulates the signal processor
 def signal_thread():
 	sig = sp()
-	while True:	#Production code and later testing need to add a way of breaking out of this loop
+	while kill_signal.get() < 0:
 		buffer.set(sig.wait_and_read())
 
 #Fuction for the front-end thread; consumes output from the signal thread
 def main():
-	#current function is entierly a placeholder
-	while True: #Actual testing main function needs to have a way to exit
-		print(buffer.get())
+	Interface.create_home_window(buffer)
 
 if __name__=="__main__":
 	#construct the thread objects
@@ -56,6 +57,6 @@ if __name__=="__main__":
 	t2.start()
 
 	#wait for threads to end
-	#placeholder functions currently do not terminate, but ones used in testing should
-	t1.join()
 	t2.join()
+	kill_signal.set(1.0)
+	t1.join()

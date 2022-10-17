@@ -2,6 +2,8 @@ from tkinter import *
 import tkinter.ttk as tk
 from PIL import ImageTk, Image
 import random
+import MusicMath as mm
+from MainScaffold import ProtectedBuffer
 
 def create_page(window):
     
@@ -21,13 +23,16 @@ def create_page(window):
     window.grid_columnconfigure(3, weight=2)
     
 
-def create_home_window():
+def create_home_window(_buf: ProtectedBuffer = None):
     
     global root #Creates new window
- 
+    global buf #Create a shared buffer that persists between threads
+    if _buf is not None:
+        buf = _buf
+
     #Allows for Bass Trebel and Alto images to appear
     def change_image(pos):
-        image_list = ['images/bass_icon.png','images/trebel_icon.png','images/alto_icon.png']
+        image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/trebel_icon.png','tkinder/Windows/images/alto_icon.png']
         new_img=ImageTk.PhotoImage(Image.open(image_list[pos]))
         image1.configure(image=new_img)
         image1.image=new_img
@@ -37,7 +42,7 @@ def create_home_window():
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
-    bg = PhotoImage(file='images/tamu_background.png')
+    bg = PhotoImage(file='tkinder/Windows/images/tamu_background.png')
     my_label = Label(root,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
 
     #Creates page, buttons, textboxes and header
@@ -45,7 +50,7 @@ def create_home_window():
     header = tk.Label(root,text='Tuner',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2)
     
     #adds in temporary image and text
-    my_file = 'images/sample2.png'
+    my_file = 'tkinder/Windows/images/sample2.png'
     my_image = PhotoImage(file =my_file)
     image1 = Label(root,image=my_image)
     image1.grid(row=2,column=3)
@@ -64,8 +69,18 @@ def create_home_window():
     train_button.grid(row=5,column=3,padx=20,pady=20)
     stats_button = Button(root,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[root.destroy(),create_stats_window()])
     stats_button.grid(row=5,column=5,columnspan=2,padx=20,pady=20)
+
+    #Function for continuously updating deviation
+    def display_deviation():
+        value = buf.get()
+        print(value)
+        note = mm.closest_note(value)
+        deviation = mm.cent_deviation(value,note)
+        image_label = Label(root,text=('+/- ' + str(deviation) + 'cents'),font=("Arial",12,'bold')).grid(row=2,column=4)
+        root.after(50, display_deviation)
     
     #Run window
+    display_deviation()
     root.mainloop()
 
 def create_trainer_window():
@@ -74,7 +89,7 @@ def create_trainer_window():
     
     #Allows for Bass Trebel and Alto images to appear
     def change_image(pos):
-        image_list = ['images/bass_icon.png','images/trebel_icon.png','images/alto_icon.png']
+        image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/trebel_icon.png','tkinder/Windows/images/alto_icon.png']
         new_img=ImageTk.PhotoImage(Image.open(image_list[pos]))
         image1.configure(image=new_img)
         image1.image=new_img
@@ -84,7 +99,7 @@ def create_trainer_window():
     trainer_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
-    bg = PhotoImage(file='images/tamu_background2.png')
+    bg = PhotoImage(file='tkinder/Windows/images/tamu_background2.png')
     my_label = Label(trainer_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
     
     #Create trainer page with header, buttons and Textboxes
@@ -92,7 +107,7 @@ def create_trainer_window():
     header = tk.Label(trainer_window,text='Training',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2)
     
     #adds in temporary image and text
-    my_file = 'images/train_icon.png'
+    my_file = 'tkinder/Windows/images/train_icon.png'
     my_image = PhotoImage(file =my_file)
     image1 = Label(trainer_window,image=my_image)
     image1.grid(row=2,column=3)
@@ -121,7 +136,7 @@ def create_stats_window():
     
     #Allows for Today Week and Month images to appear
     def change_image(pos):
-        image_list = ["images/TODAY.png","images/WEEK.png","images/MONTH.png"]
+        image_list = ["tkinder/Windows/images/TODAY.png","tkinder/Windows/images/WEEK.png","tkinder/Windows/images/MONTH.png"]
         new_img=ImageTk.PhotoImage(Image.open(image_list[pos]))
         image1.configure(image=new_img)
         image1.image=new_img
@@ -132,7 +147,7 @@ def create_stats_window():
     stats_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
-    bg = PhotoImage(file='images/tamu_background3.png')
+    bg = PhotoImage(file='tkinder/Windows/images/tamu_background3.png')
     my_label = Label(stats_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
     
     #Creates page, buttons, and header
@@ -140,7 +155,7 @@ def create_stats_window():
     header = tk.Label(stats_window,text='Your Progress',font=("Arial",25,'bold')).grid(row=1,column=3,columnspan=2)
     
     #add image
-    my_file = 'images/stat_icon.png'
+    my_file = 'tkinder/Windows/images/stat_icon.png'
     my_image = PhotoImage(file =my_file)
     image1 = Label(stats_window,image=my_image)
     image1.grid(row=2,column=3)
@@ -163,4 +178,5 @@ def create_stats_window():
     #Run window
     stats_window.mainloop()
 
-create_home_window() #Start program
+if __name__=="__main__": #only run program immediately if called as a script
+    create_home_window() #Start program
