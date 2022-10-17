@@ -11,7 +11,10 @@ def closest_note(freq):
 	returns an integer representing the closest reference note to freq as the number of semitones above A440
 	"""
 	#fn = f0*2**(n/12)
-	n = int(round(12*log2(freq/440),0))
+	if freq > 0:
+		n = int(round(12*log2(freq/440),0))
+	else:
+		n = -1
 	return n
 
 def cent_deviation(freq, note):
@@ -20,7 +23,10 @@ def cent_deviation(freq, note):
 	The reference note as an integer number of semitones above A440
 	Returns deviation between frequency and reference note in cents
 	"""
-	c = (12*log2(freq/440)-note)*100
+	if freq > 0:
+		c = (12*log2(freq/440)-note)*100
+	else:
+		c = -1
 	return c
 
 def octave(note):
