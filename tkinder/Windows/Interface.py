@@ -54,7 +54,8 @@ def create_home_window(_buf: ProtectedBuffer = None):
     my_image = PhotoImage(file =my_file)
     image1 = Label(root,image=my_image)
     image1.grid(row=2,column=3)
-    image_label = Label(root,text=('+/- ' + str(random.randint(0, 99)) + 'chz'),font=("Arial",12,'bold')).grid(row=2,column=4)
+    stringbuf = StringVar(root,value=('+/- ' + str(random.randint(0, 99)) + 'cents')) #text is stored in a StringVar object that the label can access by reference
+    image_label = Label(root,textvariable=stringbuf,font=("Ludica Console",12,'bold'),width=9,anchor='e').grid(row=2,column=4) #label passively gets text from the textvariable
       
     #adds Bass Alto Trebel button functionality
     bass_button = Button(root,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_image(0)])
@@ -73,14 +74,13 @@ def create_home_window(_buf: ProtectedBuffer = None):
     #Function for continuously updating deviation
     def display_deviation():
         value = buf.get()
-        print(value)
         note = mm.closest_note(value)
         deviation = mm.cent_deviation(value,note)
-        image_label = Label(root,text=('+/- ' + str(deviation) + 'cents'),font=("Arial",12,'bold')).grid(row=2,column=4)
-        root.after(50, display_deviation)
+        stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
+        root.after(50, display_deviation) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
     #Run window
-    display_deviation()
+    display_deviation() #start the ongoing background function
     root.mainloop()
 
 def create_trainer_window():
