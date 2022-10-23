@@ -46,17 +46,17 @@ def note_lookup(note, accid={}, *, oct=False):
 	"""
 	LUT = [
 		"A",	#0
-		"A#" if accid.get("A#") else "Bb",	#1
-		"Cb" if accid.get("Cb") else "B",	#2
+		"A-sharp" if accid.get("A-sharp") else "B-flat",	#1
+		"C-flat" if accid.get("C-flat") else "B",	#2
 		"C",	#3
-		"C#" if accid.get("C#") else "Db",	#4
+		"C-sharp" if accid.get("C-sharp") else "D-flat",	#4
 		"D",	#5
-		"D#" if accid.get("D#") else "Eb",	#6
-		"Fb" if accid.get("Fb") else "E",	#7
+		"D-sharp" if accid.get("D-sharp") else "E-flat",	#6
+		"F-flat" if accid.get("F-flat") else "E",	#7
 		"F",	#8
-		"F#" if accid.get("F#") else "Gb",	#9
+		"F-sharp" if accid.get("F-sharp") else "G-flat",	#9
 		"G",	#10
-		"G#" if accid.get("G#") else "Ab"]	#11
+		"G-sharp" if accid.get("G-sharp") else "A-flat"]	#11
 	if not oct:	
 		return LUT[note%12]
 	else:
