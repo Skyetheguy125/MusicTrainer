@@ -36,24 +36,27 @@ def octave(note):
 	"""
 	return floor((note+69)/12)-1
 
-def note_lookup(note, *, oct=False):
+def note_lookup(note, accid={}, *, oct=False):
 	"""
 	note - reference note as an integer number of semitones above A440
+	accid - a dictionary specifying which name a note should use if it has two aliases. Entries of the form "<non-default alias>": True
 	oct (keyword-only) - Enable octave mode (disabled by default)
 	returns the name of the note as a string. X-sharp -> X#, X-flat -> Xb
+	preference for default alias is no accidental > flat > sharp
 	"""
-	LUT = ["A",	#0
-		"A#/Bb",	#1
-		"B",	#2
+	LUT = [
+		"A",	#0
+		"A#" if accid.get("A#") else "Bb",	#1
+		"Cb" if accid.get("Cb") else "B",	#2
 		"C",	#3
-		"C#/Db",	#4
+		"C#" if accid.get("C#") else "Db",	#4
 		"D",	#5
-		"D#/Eb",	#6
-		"E",	#7
+		"D#" if accid.get("D#") else "Eb",	#6
+		"Fb" if accid.get("Fb") else "E",	#7
 		"F",	#8
-		"F#/Gb",	#9
+		"F#" if accid.get("F#") else "Gb",	#9
 		"G",	#10
-		"G#/Ab"]	#11
+		"G#" if accid.get("G#") else "Ab"]	#11
 	if not oct:	
 		return LUT[note%12]
 	else:
