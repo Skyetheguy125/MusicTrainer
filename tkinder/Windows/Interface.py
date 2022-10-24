@@ -66,9 +66,10 @@ def create_home_window(_buf: ProtectedBuffer = None):
     alto_button.grid(row=4,column=5,columnspan=2,padx=20,pady=10)
 
     #Adds Trainer and Stats button functionality
-    train_button = Button(root,text='Train',width=12,pady=10, bg='light blue',command=lambda:[root.destroy(),create_trainer_window()])
+    after_id = StringVar(root,"")
+    train_button = Button(root,text='Train',width=12,pady=10, bg='light blue',command=lambda:[root.after_cancel(after_id.get()),root.destroy(),create_trainer_window()])
     train_button.grid(row=5,column=3,padx=20,pady=20)
-    stats_button = Button(root,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[root.destroy(),create_stats_window()])
+    stats_button = Button(root,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[root.after_cancel(after_id.get()),root.destroy(),create_stats_window()])
     stats_button.grid(row=5,column=5,columnspan=2,padx=20,pady=20)
 
     #Function for continuously updating deviation
@@ -77,7 +78,7 @@ def create_home_window(_buf: ProtectedBuffer = None):
         note = mm.closest_note(value)
         deviation = mm.cent_deviation(value,note)
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
-        root.after(50, display_deviation) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
+        after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
     #Run window
     display_deviation() #start the ongoing background function
