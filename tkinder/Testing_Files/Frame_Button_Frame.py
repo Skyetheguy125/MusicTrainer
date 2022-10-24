@@ -28,7 +28,7 @@ entry_W = Entry(top_frame, background="pink")
 entry_L = Entry(top_frame, background="orange")
 
 # layout the widgets in the top frame
-model_label.grid(row=0, columnspan=3)
+model_label.grid(row=0, column=5, columnspan=3)
 width_label.grid(row=1, column=0)
 length_label.grid(row=1, column=2)
 entry_W.grid(row=1, column=1)
