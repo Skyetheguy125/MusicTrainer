@@ -3,39 +3,10 @@
 # Author: Tony DiCola
 # License: Public Domain
 import time
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import datetime as dt
 
 # Import the ADS1x15 module.
 import Adafruit_ADS1x15
 
-#__PLOTTING__
-#Create figure for plotting
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-xs = []
-ys = []
-
-#Animate graph function
-def animate(value, xs, ys):
-    # Add x and y to lists
-    xs.append(dt.datetime.now().strftime('%H:%M:%S.%f'))
-    ys.append(value)
-
-    # Limit x and y lists to 20 items
-    xs = xs[-20:]
-    ys = ys[-20:]
-
-    # Draw x and y lists
-    ax.clear()
-    ax.plot(xs, ys)
-
-    # Format plot
-    #plt.xticks(rotation=45, ha='right')
-    #plt.subplots_adjust(bottom=0.30)
-    plt.title('Sample Plotter')
-    plt.ylabel('Number')
 
 # Create an ADS1115 ADC (16-bit) instance.
 adc = Adafruit_ADS1x15.ADS1115()
@@ -59,19 +30,24 @@ adc = Adafruit_ADS1x15.ADS1115()
 GAIN = 1
 
 print('Reading ADS1x15 values, press Ctrl-C to quit...')
+# Print nice channel column headers.
+print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*range(4)))
+print('-' * 37)
 # Main loop.
 while True:
     # Read all the ADC channel values in a list.
-    #values = [0]*4
-    #for i in range(4):
+    values = [0]*4
+    for i in range(4):
         # Read the specified ADC channel using the previously set gain value.
-        #values[i] = adc.read_adc(i, gain=GAIN)
-
-    value = adc.read_adc(0, gain=GAIN)
-
-    #Plot values instead of printing
-    ani = animation.FuncAnimation(fig, animate, fargs=(value, xs, ys))#, interval=1000)
-    plt.show()
-
+        values[i] = adc.read_adc(i, gain=GAIN)
+        # Note you can also pass in an optional data_rate parameter that controls
+        # the ADC conversion time (in samples/second). Each chip has a different
+        # set of allowed data rate values, see datasheet Table 9 config register
+        # DR bit values.
+        #values[i] = adc.read_adc(i, gain=GAIN, data_rate=128)
+        # Each value will be a 12 or 16 bit signed integer value depending on the
+        # ADC (ADS1015 = 12-bit, ADS1115 = 16-bit).
+    # Print the ADC values.
+    print('| {0:>6} | {1:>6} | {2:>6} | {3:>6} |'.format(*values))
     # Pause for half a second.
     time.sleep(0.5)
