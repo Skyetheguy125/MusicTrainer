@@ -27,20 +27,31 @@ def create_home_window(_buf: ProtectedBuffer = None):
     
     global root #Creates new window
     global buf #Create a shared buffer that persists between threads
+    global tuner_clef
     if _buf is not None:
         buf = _buf
 
     #Allows for Bass Trebel and Alto images to appear
-    def change_image(pos):
+    def change_image(pos,IMG_Name='staff'):
+        global tuner_clef
+        tuner_clef=pos
         image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/trebel_icon.png','tkinder/Windows/images/alto_icon.png']
-        new_img=ImageTk.PhotoImage(Image.open(image_list[pos]))
+        clef=''
+        if(pos==0):
+            clef='Bass'
+        elif(pos==1):
+            clef='Treble'
+        else:
+            clef='Alto'
+        image_Note = 'tkinder/Windows/images/'+clef+'/'+IMG_Name+'.png'
+        new_img=ImageTk.PhotoImage(Image.open(image_Note))
         image1.configure(image=new_img)
         image1.image=new_img
        
     root = Tk()
     root.title('Music Trainer')
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
-    
+    tuner_clef=0
     #set Background
     bg = PhotoImage(file='tkinder/Windows/images/tamu_background.png')
     my_label = Label(root,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
@@ -78,7 +89,14 @@ def create_home_window(_buf: ProtectedBuffer = None):
         note = mm.closest_note(value)
         deviation = mm.cent_deviation(value,note)
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
-        after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
+        
+        #Automatic Note updating image
+        global tuner_clef
+        Temp_List=['B4','C4','F4','G4','D4']
+        IMG_Name=random.choice(Temp_List)
+        change_image(tuner_clef,IMG_Name)
+        
+        root.after(50, display_deviation) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
     #Run window
     display_deviation() #start the ongoing background function
