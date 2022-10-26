@@ -77,9 +77,10 @@ def create_home_window(_buf: ProtectedBuffer = None):
     alto_button.grid(row=4,column=5,columnspan=2,padx=20,pady=10)
 
     #Adds Trainer and Stats button functionality
-    train_button = Button(root,text='Train',width=12,pady=10, bg='light blue',command=lambda:[root.destroy(),create_trainer_window()])
+    after_id = StringVar(root,"")
+    train_button = Button(root,text='Train',width=12,pady=10, bg='light blue',command=lambda:[root.after_cancel(after_id.get()),root.destroy(),create_trainer_window()])
     train_button.grid(row=5,column=3,padx=20,pady=20)
-    stats_button = Button(root,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[root.destroy(),create_stats_window()])
+    stats_button = Button(root,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[root.after_cancel(after_id.get()),root.destroy(),create_stats_window()])
     stats_button.grid(row=5,column=5,columnspan=2,padx=20,pady=20)
 
     #Function for continuously updating deviation
@@ -124,12 +125,17 @@ def create_trainer_window():
     create_page(trainer_window)                #Create Textboxes
     header = tk.Label(trainer_window,text='Training',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2)
     
-    #adds in temporary image and text
+    #adds in temporary image and text actual note
     my_file = 'tkinder/Windows/images/train_icon.png'
     my_image = PhotoImage(file =my_file)
     image1 = Label(trainer_window,image=my_image)
     image1.grid(row=2,column=3)
-    image_label = Label(trainer_window,text=('+/- ' + str(random.randint(0, 99)) + 'chz'),font=("Arial",12,'bold')).grid(row=2,column=4) 
+    image_label = Label(trainer_window,text=('+/- ' + str(random.randint(0, 99)) + 'chz'),font=("Arial",12,'bold')).grid(row=2,column=4)
+
+    target_file = "tkinder/Windows/images/sample2.png"
+    target_image = PhotoImage(file=target_file)
+    image2 = Label(trainer_window,image=target_image)
+    image2.grid(row=2,column=2) 
     
     #adds Bass Alto Trebel button functionality
     bass_button = Button(trainer_window,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_image(0)])

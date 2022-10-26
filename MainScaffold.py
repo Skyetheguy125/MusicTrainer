@@ -48,15 +48,18 @@ def main():
 	Interface.create_home_window(buffer)
 
 if __name__=="__main__":
-	#construct the thread objects
+	#construct the thread object(s)
 	t1 = threading.Thread(target=signal_thread)
-	t2 = threading.Thread(target=main)
+	#t2 = threading.Thread(target=main)
 
-	#start threads
+	#start thread(s)
 	t1.start()
-	t2.start()
+	#t2.start()
 
-	#wait for threads to end
-	t2.join()
+	#run UUT
+	main()
+
+	#after UUT returns, wait for threads to end
+	#t2.join()
 	kill_signal.set(1.0)
 	t1.join()
