@@ -107,12 +107,17 @@ def create_trainer_window():
     create_page(trainer_window)                #Create Textboxes
     header = tk.Label(trainer_window,text='Training',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2)
     
-    #adds in temporary image and text
+    #adds in temporary image and text actual note
     my_file = 'tkinder/Windows/images/train_icon.png'
     my_image = PhotoImage(file =my_file)
     image1 = Label(trainer_window,image=my_image)
     image1.grid(row=2,column=3)
-    image_label = Label(trainer_window,text=('+/- ' + str(random.randint(0, 99)) + 'chz'),font=("Arial",12,'bold')).grid(row=2,column=4) 
+    image_label = Label(trainer_window,text=('+/- ' + str(random.randint(0, 99)) + 'chz'),font=("Arial",12,'bold')).grid(row=2,column=4)
+
+    target_file = "tkinder/Windows/images/sample2.png"
+    target_image = PhotoImage(file=target_file)
+    image2 = Label(trainer_window,image=target_image)
+    image2.grid(row=2,column=2) 
     
     #adds Bass Alto Trebel button functionality
     bass_button = Button(trainer_window,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_image(0)])
