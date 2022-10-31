@@ -96,7 +96,7 @@ def create_home_window(_buf: ProtectedBuffer = None):
         IMG_Name=random.choice(Temp_List)
         change_image(tuner_clef,IMG_Name)
         
-        root.after(50, display_deviation) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
+        after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
     #Run window
     display_deviation() #start the ongoing background function
