@@ -5,6 +5,16 @@ import random
 import MusicMath as mm
 from MainScaffold import ProtectedBuffer
 
+def change_image(image_Note,image=None):
+    try:
+        new_img=ImageTk.PhotoImage(Image.open(image_Note))
+    except FileNotFoundError as e:
+        image_Note = 'tkinder/Windows/images/'+tuner_clef+'/staff.png'
+        print("FileNotFoundError [{errno}]: {errstr} \"{filename}\"".format(errno=e.errno,errstr=e.strerror,filename=e.filename))
+        new_img=ImageTk.PhotoImage(Image.open(image_Note))
+    image.configure(image=new_img)
+    image.image=new_img
+
 def create_page(window):
     
     #Create rows and collumn
@@ -31,32 +41,27 @@ def create_home_window(_buf: ProtectedBuffer = None):
     if _buf is not None:
         buf = _buf
 
-    #Allows for Bass Trebel and Alto images to appear
-    def change_image(pos,IMG_Name='staff'):
+    #Allows for Bass Treble and Alto images to appear
+    def change_note_image(IMG_Name='staff'):
         global tuner_clef
-        tuner_clef=pos
-        image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/trebel_icon.png','tkinder/Windows/images/alto_icon.png']
-        clef=''
-        if(pos==0):
-            clef='Bass'
-        elif(pos==1):
-            clef='Treble'
-        else:
-            clef='Alto'
-        image_Note = 'tkinder/Windows/images/'+clef+'/'+IMG_Name+'.png'
-        try:
-            new_img=ImageTk.PhotoImage(Image.open(image_Note))
-        except FileNotFoundError as e:
-            image_Note = 'tkinder/Windows/images/'+clef+'/staff.png'
-            print("FileNotFoundError [{errno}]: {errstr} \"{filename}\"".format(errno=e.errno,errstr=e.strerror,filename=e.filename))
-            new_img=ImageTk.PhotoImage(Image.open(image_Note))
-        image1.configure(image=new_img)
-        image1.image=new_img
+        image_Note = 'tkinder/Windows/images/'+tuner_clef+'/'+IMG_Name+'.png'
+        change_image(image_Note,image1)
+        
+    #Allows clef-changing as an independent operation inside a lambda expression
+    def change_clef(clef):
+        '''
+        clef - 'Bass', 'Treble', or 'Alto'. Raises exception on other input.
+        modifies global variable tuner_clef to be equal to clef.
+        '''
+        global tuner_clef
+        if clef not in {'Bass','Treble','Alto'}:
+            raise Exception("Clef {_clef} does not exist".format(_clef=clef))
+        tuner_clef = clef
        
     root = Tk()
     root.title('Music Trainer')
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
-    tuner_clef=0
+    tuner_clef='Bass'
     #set Background
     bg = PhotoImage(file='tkinder/Windows/images/tamu_background.png')
     my_label = Label(root,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
@@ -73,12 +78,12 @@ def create_home_window(_buf: ProtectedBuffer = None):
     stringbuf = StringVar(root,value=('+/- ' + str(random.randint(0, 99)) + 'cents')) #text is stored in a StringVar object that the label can access by reference
     image_label = Label(root,textvariable=stringbuf,font=("Ludica Console",12,'bold'),width=9,anchor='e').grid(row=2,column=4) #label passively gets text from the textvariable
       
-    #adds Bass Alto Trebel button functionality
-    bass_button = Button(root,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_image(0)])
+    #adds Bass Alto Treble button functionality
+    bass_button = Button(root,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_clef('Bass'),change_note_image(image=image1)])
     bass_button.grid(row=4,column=1,columnspan=2,padx=20,pady=2)
-    trebel_button = Button(root,text='Trebel',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_image(1)])
-    trebel_button.grid(row=4,column=3,padx=20,pady=2)
-    alto_button = Button(root,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_image(2)])
+    treble_button = Button(root,text='Treble',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_clef('Treble'), change_note_image(image=image1)])
+    treble_button.grid(row=4,column=3,padx=20,pady=2)
+    alto_button = Button(root,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_clef('Alto'), change_note_image(image=image1)])
     alto_button.grid(row=4,column=5,columnspan=2,padx=20,pady=10)
 
     #Adds Trainer and Stats button functionality
@@ -96,10 +101,9 @@ def create_home_window(_buf: ProtectedBuffer = None):
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
         
         #Automatic Note updating image
-        global tuner_clef
         Temp_List=['B4','C4','F4','G4','D4']
         IMG_Name=random.choice(Temp_List)
-        change_image(tuner_clef,IMG_Name)
+        change_note_image(IMG_Name,image1)
         
         after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
@@ -111,9 +115,9 @@ def create_trainer_window():
 
     global trainer_window  #Creates new window
     
-    #Allows for Bass Trebel and Alto images to appear
+    #Allows for Bass Treble and Alto images to appear
     def change_image(pos):
-        image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/trebel_icon.png','tkinder/Windows/images/alto_icon.png']
+        image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/treble_icon.png','tkinder/Windows/images/alto_icon.png']
         new_img=ImageTk.PhotoImage(Image.open(image_list[pos]))
         image1.configure(image=new_img)
         image1.image=new_img
@@ -142,11 +146,11 @@ def create_trainer_window():
     image2 = Label(trainer_window,image=target_image)
     image2.grid(row=2,column=2) 
     
-    #adds Bass Alto Trebel button functionality
+    #adds Bass Alto Treble button functionality
     bass_button = Button(trainer_window,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_image(0)])
     bass_button.grid(row=4,column=1,columnspan=2,padx=20,pady=2)
-    trebel_button = Button(trainer_window,text='Trebel',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_image(1)])
-    trebel_button.grid(row=4,column=3,padx=20,pady=2)
+    treble_button = Button(trainer_window,text='Treble',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_image(1)])
+    treble_button.grid(row=4,column=3,padx=20,pady=2)
     alto_button = Button(trainer_window,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_image(2)])
     alto_button.grid(row=4,column=5,columnspan=2,padx=20,pady=10)
     
