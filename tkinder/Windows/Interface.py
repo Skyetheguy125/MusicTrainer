@@ -5,26 +5,6 @@ import random
 import MusicMath as mm
 from MainScaffold import ProtectedBuffer
 
-def create_welcome_window(_buf: ProtectedBuffer = None):
-    global welcome_window
-    global buf
-    if _buf is not None:
-        buf = _buf
-    welcome_window = Tk()
-    welcome_window.title('Welcome')
-    welcome_window.geometry('{}x{}'.format(800, 480)) #Width x Height
-    bg = PhotoImage(file='tkinder/Windows/images/tamu_background0.png')
-    my_label = Label(welcome_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
-    
-    start_button = Button(welcome_window, text="Begin Music Trainer", command=create_home_window)
-    start_button.pack(padx=20,pady=20)
-    
-    close_button = Button(welcome_window, text="Close Music Trainer Program", command=welcome_window.destroy)
-    close_button.pack()
-    
-    welcome_window.wm_attributes('-fullscreen', 'True')
-    welcome_window.mainloop()
-
 def create_page(window):
     
     #Create rows and collumn
@@ -40,8 +20,30 @@ def create_page(window):
     
     #Configures window to make middle row and column wider
     window.grid_rowconfigure(2, weight=2)
-    window.grid_columnconfigure(3, weight=2)
+    window.grid_columnconfigure(3, weight=2)   
+
+def create_welcome_window(_buf: ProtectedBuffer = None):
+    global welcome_window
+    global buf
+    if _buf is not None:
+        buf = _buf
+        
+    #Creating default window. Sizing, background and buttons
+    welcome_window = Tk()
+    welcome_window.title('Welcome')
+    welcome_window.geometry('{}x{}'.format(800, 480)) #Width x Height
+    bg = PhotoImage(file='tkinder/Windows/images/tamu_background0.png')
+    my_label = Label(welcome_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
     
+    #start and close button added to default window
+    start_button = Button(welcome_window, text="Begin Music Trainer", command=create_home_window)
+    start_button.pack(padx=20,pady=20)
+    close_button = Button(welcome_window, text="Close Music Trainer Program", command=welcome_window.destroy)
+    close_button.pack()
+    
+    #lets window become full screen (no title bar visable)
+    welcome_window.wm_attributes('-fullscreen', 'True')
+    welcome_window.mainloop()
 
 def create_home_window(_buf: ProtectedBuffer = None):
     
