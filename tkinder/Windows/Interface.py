@@ -103,7 +103,7 @@ def create_home_window(_buf: ProtectedBuffer = None):
         #Automatic Note updating image
         Temp_List=['B4','C4','F4','G4','D4']
         IMG_Name=random.choice(Temp_List)
-        change_note_image(IMG_Name,image1)
+        change_note_image(IMG_Name)
         
         after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
