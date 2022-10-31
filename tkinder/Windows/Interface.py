@@ -13,7 +13,7 @@ def create_welcome_window(_buf: ProtectedBuffer = None):
     welcome_window = Tk()
     welcome_window.title('Welcome')
     welcome_window.geometry('{}x{}'.format(800, 480)) #Width x Height
-    bg = PhotoImage(file='tkinder/Windows/images/tamu_background2.png')
+    bg = PhotoImage(file='tkinder/Windows/images/tamu_background0.png')
     my_label = Label(welcome_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
     
     start_button = Button(welcome_window, text="Begin Music Trainer", command=create_home_window)
