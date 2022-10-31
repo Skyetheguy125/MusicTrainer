@@ -5,6 +5,26 @@ import random
 import MusicMath as mm
 from MainScaffold import ProtectedBuffer
 
+def create_welcome_window(_buf: ProtectedBuffer = None):
+    global welcome_window
+    global buf
+    if _buf is not None:
+        buf = _buf
+    welcome_window = Tk()
+    welcome_window.title('Welcome')
+    welcome_window.geometry('{}x{}'.format(800, 480)) #Width x Height
+    bg = PhotoImage(file='tkinder/Windows/images/tamu_background2.png')
+    my_label = Label(welcome_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
+    
+    start_button = Button(welcome_window, text="Begin Music Trainer", command=create_home_window)
+    start_button.pack(padx=20,pady=20)
+    
+    close_button = Button(welcome_window, text="Close Music Trainer Program", command=welcome_window.destroy)
+    close_button.pack()
+    
+    welcome_window.wm_attributes('-fullscreen', 'True')
+    welcome_window.mainloop()
+
 def create_page(window):
     
     #Create rows and collumn
@@ -48,7 +68,7 @@ def create_home_window(_buf: ProtectedBuffer = None):
         image1.configure(image=new_img)
         image1.image=new_img
        
-    root = Tk()
+    root = Toplevel(welcome_window)
     root.title('Music Trainer')
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
     tuner_clef=0
@@ -113,7 +133,8 @@ def create_trainer_window():
         image1.configure(image=new_img)
         image1.image=new_img
         
-    trainer_window = Tk()
+    #root = Toplevel(welcome_window)
+    trainer_window = Toplevel(welcome_window)
     trainer_window.title('Training')
     trainer_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
@@ -165,8 +186,8 @@ def create_stats_window():
         image1.configure(image=new_img)
         image1.image=new_img
         
-    #Create HomePage
-    stats_window = Tk()
+    #Create the Stats page
+    stats_window = Toplevel(welcome_window)
     stats_window.title('Your Statistics')
     stats_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
@@ -202,5 +223,8 @@ def create_stats_window():
     #Run window
     stats_window.mainloop()
 
+#if __name__=="__main__": #only run program immediately if called as a script
+    #create_home_window(ProtectedBuffer()) #Start program
+
 if __name__=="__main__": #only run program immediately if called as a script
-    create_home_window(ProtectedBuffer()) #Start program
+    create_welcome_window(ProtectedBuffer()) #Start program
