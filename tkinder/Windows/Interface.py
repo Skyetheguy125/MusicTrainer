@@ -44,7 +44,12 @@ def create_home_window(_buf: ProtectedBuffer = None):
         else:
             clef='Alto'
         image_Note = 'tkinder/Windows/images/'+clef+'/'+IMG_Name+'.png'
-        new_img=ImageTk.PhotoImage(Image.open(image_Note))
+        try:
+            new_img=ImageTk.PhotoImage(Image.open(image_Note))
+        except FileNotFoundError as e:
+            image_Note = 'tkinder/Windows/images/'+clef+'/staff.png'
+            print("FileNotFoundError [{errno}]: {errstr} \"{filename}\"".format(errno=e.errno,errstr=e.strerror,filename=e.filename))
+            new_img=ImageTk.PhotoImage(Image.open(image_Note))
         image1.configure(image=new_img)
         image1.image=new_img
        
