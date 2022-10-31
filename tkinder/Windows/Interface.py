@@ -5,13 +5,13 @@ import random
 import MusicMath as mm
 from MainScaffold import ProtectedBuffer
 
-def change_image(image_Note,image=None):
+def change_image(image_name,image=None):
     try:
-        new_img=ImageTk.PhotoImage(Image.open(image_Note))
+        new_img=ImageTk.PhotoImage(Image.open(image_name))
     except FileNotFoundError as e:
-        image_Note = 'tkinder/Windows/images/'+tuner_clef+'/staff.png'
+        image_name = 'tkinder/Windows/images/'+tuner_clef+'/staff.png'
         print("FileNotFoundError [{errno}]: {errstr} \"{filename}\"".format(errno=e.errno,errstr=e.strerror,filename=e.filename))
-        new_img=ImageTk.PhotoImage(Image.open(image_Note))
+        new_img=ImageTk.PhotoImage(Image.open(image_name))
     image.configure(image=new_img)
     image.image=new_img
 
