@@ -35,23 +35,31 @@ def create_welcome_window(_buf: ProtectedBuffer = None):
     bg = PhotoImage(file='tkinder/Windows/images/tamu_background0.png')
     my_label = Label(welcome_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
     
+        #Create rows and collumn
+    temp = tk.Label(welcome_window,text='')
+    for i in range (1,10):
+        for j in range (1,7):
+            temp.grid(row=i,column=j)
+    
+        header = tk.Label(welcome_window,text='Welcome to Music Trainer v1.0',font=("Arial",32,'bold')).grid(row=1,column=3,columnspan=4,pady=10)
+    
+    start_button = Button(welcome_window,text='Start',width=10,padx=1,pady=5,bg='light green',font=("Arial",12,'bold'),command=create_home_window).grid(row=2,column=3,rowspan=2,pady=20)
+    close_button = Button(welcome_window,text='Leave',width=10,padx=1,pady=5,bg='red',font=("Arial",12,'bold'),command=welcome_window.destroy).grid(row=3,column=3,rowspan=2,pady=20)
+    welcome_window.grid_rowconfigure(2, weight=2)
+    welcome_window.grid_columnconfigure(3, weight=2)   
+    
     #start and close button added to default window
-    start_button = Button(welcome_window, text="Begin Music Trainer", command=create_home_window)
-    start_button.pack(padx=20,pady=20)
-    close_button = Button(welcome_window, text="Close Music Trainer Program", command=welcome_window.destroy)
-    close_button.pack()
+    #start_button = Button(welcome_window, text="Begin Music Trainer", bg='light green',command=create_home_window).grid(row=1,column=1,rowspan=3,padx=20,pady=20)
+    #close_button = Button(welcome_window, text="Close Music Trainer Program", bg='red',command=welcome_window.destroy).grid(row=5,column=6,columnspan=2,padx=20,pady=20)
     
     #lets window become full screen (no title bar visable)
-    welcome_window.wm_attributes('-fullscreen', 'True')
+    #welcome_window.wm_attributes('-fullscreen', 'True')
     welcome_window.mainloop()
 
-def create_home_window(_buf: ProtectedBuffer = None):
+def create_home_window():
     
     global root #Creates new window
-    global buf #Create a shared buffer that persists between threads
     global tuner_clef
-    if _buf is not None:
-        buf = _buf
 
     #Allows for Bass Trebel and Alto images to appear
     def change_image(pos,IMG_Name='staff'):
@@ -80,7 +88,7 @@ def create_home_window(_buf: ProtectedBuffer = None):
 
     #Creates page, buttons, textboxes and header
     create_page(root)                       #1st creates the grid and buttons    
-    header = tk.Label(root,text='Tuner',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2)
+    header = tk.Label(root,text='Tuner',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2,pady=10)
     
     #adds in temporary image and text
     my_file = 'tkinder/Windows/images/sample2.png'
@@ -146,7 +154,7 @@ def create_trainer_window():
     
     #Create trainer page with header, buttons and Textboxes
     create_page(trainer_window)                #Create Textboxes
-    header = tk.Label(trainer_window,text='Training',font=("Arial",30,'bold')).grid(row=1,column=3,columnspan=2)
+    header = tk.Label(trainer_window,text='Training',font=("Arial",32,'bold')).grid(row=1,column=3,columnspan=2,pady=10)
     
     #adds in temporary image and text actual note
     my_file = 'tkinder/Windows/images/train_icon.png'
@@ -199,7 +207,7 @@ def create_stats_window():
     
     #Creates page, buttons, and header
     create_page(stats_window)                               #1st creates the grid and button      
-    header = tk.Label(stats_window,text='Your Progress',font=("Arial",25,'bold')).grid(row=1,column=3,columnspan=2)
+    header = tk.Label(stats_window,text='Your Progress',font=("Arial",32,'bold')).grid(row=1,column=3,columnspan=2,pady=10)
     
     #add image
     my_file = 'tkinder/Windows/images/stat_icon.png'
