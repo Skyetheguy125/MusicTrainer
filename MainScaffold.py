@@ -45,7 +45,7 @@ def signal_thread():
 
 #Fuction for the front-end thread; consumes output from the signal thread
 def main():
-	Interface.create_home_window(buffer)
+	Interface.create_welcome_window(buffer)
 
 if __name__=="__main__":
 	#construct the thread object(s)
