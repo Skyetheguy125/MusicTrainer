@@ -39,7 +39,7 @@ kill_signal.set(-1.0)
 
 #Function for the signal thread; simulates the signal processor
 def signal_thread():
-	sig = sp()
+	sig = sp(range=(65.4,1046.5))
 	while kill_signal.get() < 0:
 		buffer.set(sig.wait_and_read())
 
