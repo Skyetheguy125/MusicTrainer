@@ -43,11 +43,14 @@ def create_page(window):
     window.grid_rowconfigure(2, weight=2)
     window.grid_columnconfigure(3, weight=2)   
 
-def create_welcome_window(_buf: ProtectedBuffer = None):
+def create_welcome_window(_signal_buf: ProtectedBuffer = None, _target_buf: ProtectedBuffer = None):
     global welcome_window
-    global buf
-    if _buf is not None:
-        buf = _buf
+    global signal_buf
+    global target_buf
+    if _signal_buf is not None:
+        signal_buf = _signal_buf
+    if _target_buf is not None:
+        target_buf = _target_buf
         
     #Creating default window. Sizing, background and buttons
     welcome_window = Tk()
@@ -126,7 +129,7 @@ def create_home_window():
 
     #Function for continuously updating deviation
     def display_deviation():
-        value = buf.get()
+        value = signal_buf.get()
         note = mm.closest_note(value)
         deviation = mm.cent_deviation(value,note)
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
@@ -152,6 +155,11 @@ def create_trainer_window():
         global tuner_clef
         image_Note = 'tkinder/Windows/images/'+tuner_clef+'/'+img_name+'.png'
         change_image(image_Note,image_actual)
+
+    def change_target_image(img_name='staff'):
+        global tuner_clef
+        image_note = 'tkinder/Windows/images/'+tuner_clef+'/'+img_name+'.png'
+        change_image(image_note,image_target)
         
     #root = Toplevel(welcome_window)
     trainer_window = Toplevel(welcome_window)
@@ -197,14 +205,20 @@ def create_trainer_window():
     
 	#Function for continuously updating deviation
     def display_deviation():
-        value = buf.get()
-        note = mm.closest_note(value)
-        deviation = mm.cent_deviation(value,note)
+        actual_value = signal_buf.get()
+        actual_note = mm.closest_note(actual_value)
+
+        target_value = target_buf.get()
+        target_note = mm.closest_note(target_value)
+
+        deviation = mm.cent_deviation(actual_value,target_note)
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
         
         #Automatic Note updating image
-        IMG_Name=mm.note_lookup(note,oct=True)
+        IMG_Name=mm.note_lookup(actual_note,oct=True)
         change_actual_image(IMG_Name)
+        IMG_Name=mm.note_lookup(target_note,oct=True)
+        change_target_image(IMG_Name)
         
         after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
