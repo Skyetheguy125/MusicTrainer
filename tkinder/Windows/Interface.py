@@ -15,6 +15,17 @@ def change_image(image_name,image=None):
     image.configure(image=new_img)
     image.image=new_img
 
+#Allows clef-changing as an independent operation inside a lambda expression
+def change_clef(clef):
+    '''
+    clef - 'Bass', 'Treble', or 'Alto'. Raises exception on other input.
+    modifies global variable tuner_clef to be equal to clef.
+    '''
+    global tuner_clef
+    if clef not in {'Bass','Treble','Alto'}:
+        raise Exception("Clef {_clef} does not exist".format(_clef=clef))
+    tuner_clef = clef
+
 def create_page(window):
     
     #Create rows and collumn
@@ -32,11 +43,14 @@ def create_page(window):
     window.grid_rowconfigure(2, weight=2)
     window.grid_columnconfigure(3, weight=2)   
 
-def create_welcome_window(_buf: ProtectedBuffer = None):
+def create_welcome_window(_signal_buf: ProtectedBuffer = None, _target_buf: ProtectedBuffer = None):
     global welcome_window
-    global buf
-    if _buf is not None:
-        buf = _buf
+    global signal_buf
+    global target_buf
+    if _signal_buf is not None:
+        signal_buf = _signal_buf
+    if _target_buf is not None:
+        target_buf = _target_buf
         
     #Creating default window. Sizing, background and buttons
     welcome_window = Tk()
@@ -63,7 +77,7 @@ def create_welcome_window(_buf: ProtectedBuffer = None):
     #close_button = Button(welcome_window, text="Close Music Trainer Program", bg='red',command=welcome_window.destroy).grid(row=5,column=6,columnspan=2,padx=20,pady=20)
     
     #lets window become full screen (no title bar visable)
-    #welcome_window.wm_attributes('-fullscreen', 'True')
+    welcome_window.wm_attributes('-fullscreen', 'True')
     welcome_window.mainloop()
 
 def create_home_window():
@@ -76,22 +90,12 @@ def create_home_window():
         global tuner_clef
         image_Note = 'tkinder/Windows/images/'+tuner_clef+'/'+IMG_Name+'.png'
         change_image(image_Note,image1)
-        
-    #Allows clef-changing as an independent operation inside a lambda expression
-    def change_clef(clef):
-        '''
-        clef - 'Bass', 'Treble', or 'Alto'. Raises exception on other input.
-        modifies global variable tuner_clef to be equal to clef.
-        '''
-        global tuner_clef
-        if clef not in {'Bass','Treble','Alto'}:
-            raise Exception("Clef {_clef} does not exist".format(_clef=clef))
-        tuner_clef = clef
        
     root = Toplevel(welcome_window)
     root.title('Music Trainer')
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
     tuner_clef='Bass'
+
     #set Background
     bg = PhotoImage(file='tkinder/Windows/images/tamu_background.png')
     my_label = Label(root,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
@@ -109,11 +113,11 @@ def create_home_window():
     image_label = Label(root,textvariable=stringbuf,font=("Ludica Console",12,'bold'),width=9,anchor='e').grid(row=2,column=4) #label passively gets text from the textvariable
       
     #adds Bass Alto Treble button functionality
-    bass_button = Button(root,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_clef('Bass'),change_note_image(image=image1)])
+    bass_button = Button(root,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_clef('Bass'),change_note_image()])
     bass_button.grid(row=4,column=1,columnspan=2,padx=20,pady=2)
-    treble_button = Button(root,text='Treble',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_clef('Treble'), change_note_image(image=image1)])
+    treble_button = Button(root,text='Treble',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_clef('Treble'), change_note_image()])
     treble_button.grid(row=4,column=3,padx=20,pady=2)
-    alto_button = Button(root,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_clef('Alto'), change_note_image(image=image1)])
+    alto_button = Button(root,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_clef('Alto'), change_note_image()])
     alto_button.grid(row=4,column=5,columnspan=2,padx=20,pady=10)
 
     #Adds Trainer and Stats button functionality
@@ -125,14 +129,14 @@ def create_home_window():
 
     #Function for continuously updating deviation
     def display_deviation():
-        value = buf.get()
+        value = signal_buf.get()
         note = mm.closest_note(value)
         deviation = mm.cent_deviation(value,note)
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
         
         #Automatic Note updating image
         Temp_List=['B4','C4','F4','G4','D4']
-        IMG_Name=random.choice(Temp_List)
+        IMG_Name=mm.note_lookup(note,oct=True)
         change_note_image(IMG_Name)
         
         after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
@@ -144,13 +148,18 @@ def create_home_window():
 def create_trainer_window():
 
     global trainer_window  #Creates new window
+    global tuner_clef
     
     #Allows for Bass Treble and Alto images to appear
-    def change_image(pos):
-        image_list = ['tkinder/Windows/images/bass_icon.png','tkinder/Windows/images/treble_icon.png','tkinder/Windows/images/alto_icon.png']
-        new_img=ImageTk.PhotoImage(Image.open(image_list[pos]))
-        image1.configure(image=new_img)
-        image1.image=new_img
+    def change_actual_image(img_name='staff'):
+        global tuner_clef
+        image_Note = 'tkinder/Windows/images/'+tuner_clef+'/'+img_name+'.png'
+        change_image(image_Note,image_actual)
+
+    def change_target_image(img_name='staff'):
+        global tuner_clef
+        image_note = 'tkinder/Windows/images/'+tuner_clef+'/'+img_name+'.png'
+        change_image(image_note,image_target)
         
     #root = Toplevel(welcome_window)
     trainer_window = Toplevel(welcome_window)
@@ -168,30 +177,53 @@ def create_trainer_window():
     #adds in temporary image and text actual note
     my_file = 'tkinder/Windows/images/train_icon.png'
     my_image = PhotoImage(file =my_file)
-    image1 = Label(trainer_window,image=my_image)
-    image1.grid(row=2,column=3)
-    image_label = Label(trainer_window,text=('+/- ' + str(random.randint(0, 99)) + 'chz'),font=("Arial",12,'bold')).grid(row=2,column=4)
+    image_actual = Label(trainer_window,image=my_image)
+    image_actual.grid(row=2,column=3)
+    stringbuf = StringVar(root,value=('+/- ' + str(random.randint(0, 99)) + 'cents')) #text is stored in a StringVar object that the label can access by reference
+    image_label = Label(trainer_window,textvariable=stringbuf,font=("Ludica Console",12,'bold'),width=9,anchor='e').grid(row=2,column=4)
 
+    #adds temporary image for target note
     target_file = "tkinder/Windows/images/sample2.png"
     target_image = PhotoImage(file=target_file)
-    image2 = Label(trainer_window,image=target_image)
-    image2.grid(row=2,column=2) 
+    image_target = Label(trainer_window,image=target_image)
+    image_target.grid(row=2,column=2) 
     
     #adds Bass Alto Treble button functionality
-    bass_button = Button(trainer_window,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_image(0)])
+    bass_button = Button(trainer_window,text='Bass',width=8,pady=5,bg='light green',font=("Arial",17,'bold'),command=lambda:[change_clef('Bass'), change_actual_image()])
     bass_button.grid(row=4,column=1,columnspan=2,padx=20,pady=2)
-    treble_button = Button(trainer_window,text='Treble',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_image(1)])
+    treble_button = Button(trainer_window,text='Treble',width=8,pady=5,bg='light blue',font=("Arial",17,'bold'),command=lambda:[change_clef('Treble'), change_actual_image()])
     treble_button.grid(row=4,column=3,padx=20,pady=2)
-    alto_button = Button(trainer_window,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_image(2)])
+    alto_button = Button(trainer_window,text='Alto',width=8,pady=2,bg='lavender',font=("Arial",17,'bold'),command=lambda:[change_clef('Alto'), change_actual_image(2)])
     alto_button.grid(row=4,column=5,columnspan=2,padx=20,pady=10)
     
     #Add button Tuner and Stats functionality
-    tuner_button = Button(trainer_window,text='Tuner',width=12,pady=10,bg='light green',command=lambda:[trainer_window.destroy(),create_home_window()])
+    after_id = StringVar(root,"")
+    tuner_button = Button(trainer_window,text='Tuner',width=12,pady=10,bg='light green',command=lambda:[trainer_window.after_cancel(after_id.get()), trainer_window.destroy(), create_home_window()])
     tuner_button.grid(row=5,column=1,columnspan=2,padx=20,pady=20)
-    stats_button = Button(trainer_window,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[trainer_window.destroy(),create_stats_window()])
+    stats_button = Button(trainer_window,text='Stats',width=12,pady=10,bg='lavender',command=lambda:[trainer_window.after_cancel(after_id.get()), trainer_window.destroy(), trainer_window.destroy(),create_stats_window()])
     stats_button.grid(row=5,column=5,columnspan=2,padx=20,pady=20)
     
-    #run window
+	#Function for continuously updating deviation
+    def display_deviation():
+        actual_value = signal_buf.get()
+        actual_note = mm.closest_note(actual_value)
+
+        target_value = target_buf.get()
+        target_note = mm.closest_note(target_value)
+
+        deviation = mm.cent_deviation(actual_value,target_note)
+        stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
+        
+        #Automatic Note updating image
+        IMG_Name=mm.note_lookup(actual_note,oct=True)
+        change_actual_image(IMG_Name)
+        IMG_Name=mm.note_lookup(target_note,oct=True)
+        change_target_image(IMG_Name)
+        
+        after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
+    
+    #Run window
+    display_deviation() #start the ongoing background function
     trainer_window.mainloop()
        
 def create_stats_window():
