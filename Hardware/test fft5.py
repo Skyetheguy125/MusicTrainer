@@ -1,25 +1,25 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
 import scipy.fft as fft
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import math
 
-data = pd.read_csv('sample.csv',index_col=0)
-data = data['sample'].astype(float).values
-print(data)
+SAMPLE_RATE = 33.33  # Hertz
+DURATION = 6  # Seconds
+DATA_POINTS = 860  # Samples
+N = math.ceil(SAMPLE_RATE * DURATION)
 
-N = data.shape[0] #number of elements
-t = np.linspace(0, 300, N)
-#t=np.arange(N)
-s = data
+#Use Pandas to read sample csv
+df = pd.read_csv('sample860.csv', header=None)
+#print(df)
 
-fft = fft.fft(s)
-fftfreq = fft.fftfreq(len(s))
+#Take channel 0 only and convert to a list
+result = df[0].tolist()
 
-T = t[1] - t[0]
-print(T)
-
-f = np.linspace(0, 1 / T, N)
-plt.ylabel("Amplitude")
-plt.xlabel("Frequency [Hz]")
-plt.plot(fftfreq, np.absolute(fft))
-#plt.xlim(0,100)
+x = np.linspace(0, DURATION, N, endpoint=False)
+plt.plot(x, result)
+plt.title("Plot CSV")
+plt.xlabel("Time (seconds)")
+plt.ylabel("ADC Value")
+plt.grid()
+plt.show()
