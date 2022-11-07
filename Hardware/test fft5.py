@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 import math
 
-SAMPLE_RATE = 33.33  # Hertz
-DURATION = 6  # Seconds
-DATA_POINTS = 860  # Samples
+SAMPLE_RATE = 25  # Hertz
+DURATION = 8  # Seconds
+DATA_POINTS = 200  # Samples
 N = math.ceil(SAMPLE_RATE * DURATION)
 
 #Use Pandas to read sample csv
