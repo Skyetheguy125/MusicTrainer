@@ -54,7 +54,7 @@ def create_welcome_window(_signal_buf: ProtectedBuffer = None, _target_buf: Prot
         
     #Creating default window. Sizing, background and buttons
     welcome_window = Tk()
-    welcome_window.title('Welcome')
+    welcome_window.title('CSCE 483 Music Trainer')
     welcome_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     bg = PhotoImage(file='tkinder/Windows/images/tamu_background0.png')
     my_label = Label(welcome_window,image=bg).place(x=0, y=0, relwidth=1, relheight=1)
@@ -65,17 +65,14 @@ def create_welcome_window(_signal_buf: ProtectedBuffer = None, _target_buf: Prot
         for j in range (1,7):
             temp.grid(row=i,column=j)
     
-        header = tk.Label(welcome_window,text='Welcome to Music Trainer v1.0',font=("Arial",32,'bold')).grid(row=1,column=3,columnspan=4,pady=10)
+    header = tk.Label(welcome_window,text='Welcome to Music Trainer v1.0',font=("Arial",32,'bold')).grid(row=1,column=3,columnspan=4,pady=10)
     
+    #start and close button added to default window
     start_button = Button(welcome_window,text='Start',width=10,padx=1,pady=5,bg='light green',font=("Arial",12,'bold'),command=create_home_window).grid(row=2,column=3,rowspan=2,pady=20)
     close_button = Button(welcome_window,text='Leave',width=10,padx=1,pady=5,bg='red',font=("Arial",12,'bold'),command=welcome_window.destroy).grid(row=3,column=3,rowspan=2,pady=20)
     welcome_window.grid_rowconfigure(2, weight=2)
     welcome_window.grid_columnconfigure(3, weight=2)   
-    
-    #start and close button added to default window
-    #start_button = Button(welcome_window, text="Begin Music Trainer", bg='light green',command=create_home_window).grid(row=1,column=1,rowspan=3,padx=20,pady=20)
-    #close_button = Button(welcome_window, text="Close Music Trainer Program", bg='red',command=welcome_window.destroy).grid(row=5,column=6,columnspan=2,padx=20,pady=20)
-    
+        
     #lets window become full screen (no title bar visable)
     welcome_window.wm_attributes('-fullscreen', 'True')
     welcome_window.mainloop()
@@ -92,7 +89,7 @@ def create_home_window():
         change_image(image_Note,image1)
        
     root = Toplevel(welcome_window)
-    root.title('Music Trainer')
+    root.title('Tune Your Instrument')
     root.geometry('{}x{}'.format(800, 480)) #Width x Height
     tuner_clef='Bass'
 
@@ -163,7 +160,7 @@ def create_trainer_window():
         
     #root = Toplevel(welcome_window)
     trainer_window = Toplevel(welcome_window)
-    trainer_window.title('Training')
+    trainer_window.title('Train Your Skills')
     trainer_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
@@ -239,7 +236,7 @@ def create_stats_window():
         
     #Create the Stats page
     stats_window = Toplevel(welcome_window)
-    stats_window.title('Your Statistics')
+    stats_window.title('Show Your Progress')
     stats_window.geometry('{}x{}'.format(800, 480)) #Width x Height
     
     #set Background
