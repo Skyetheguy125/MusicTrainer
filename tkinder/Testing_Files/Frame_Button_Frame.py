@@ -1,4 +1,6 @@
 from tkinter import *
+from PIL import ImageTk, Image
+import PIL as pil
 import tkinter.ttk as ttk
 
 root = Tk()
@@ -45,5 +47,11 @@ ctr_right = Frame(center, bg='green', width=100, height=190, padx=3, pady=3)
 ctr_left.grid(row=0, column=0, sticky="ns")
 ctr_mid.grid(row=0, column=1, sticky="nsew")
 ctr_right.grid(row=0, column=2, sticky="ns")
+
+# image test
+image1 = ImageTk.PhotoImage(Image.open("../../Images/test.png"))
+canvas = Canvas(root, width = 300, height = 300)
+canvas.pack()
+canvas.create_img(20,20, anchor=NW, image=image1)
 
 root.mainloop()
