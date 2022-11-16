@@ -8,6 +8,7 @@ from MainScaffold import ProtectedBuffer
 def change_image(image_name,image=None):
     try:
         t_image = Image.open(image_name)
+        t_image = t_image.crop((0,30,t_image.width,t_image.height-50))
         (width, height) = (t_image.width // 2, t_image.height // 2)
         im_resized = t_image.resize((width, height))
         new_img=ImageTk.PhotoImage(im_resized)
@@ -15,6 +16,8 @@ def change_image(image_name,image=None):
         image_name = 'tkinder/Windows/images/'+tuner_clef+'/staff.png'
         print("FileNotFoundError [{errno}]: {errstr} \"{filename}\"".format(errno=e.errno,errstr=e.strerror,filename=e.filename))
         t_image = Image.open(image_name)
+        t_image = t_image.crop((0,30,t_image.width,t_image.height-50))
+
         (width, height) = (t_image.width // 2, t_image.height // 2)
         im_resized = t_image.resize((width, height))
         new_img=ImageTk.PhotoImage(im_resized)
