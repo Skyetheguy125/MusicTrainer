@@ -11,7 +11,7 @@ DURATION = .112  # Seconds
 SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
 #Use Pandas to read sample csv
-df = pd.read_csv('Samples/1000samples_1pluck.csv', header=None)
+df = pd.read_csv('Samples/uke_3rd_string_0.csv', header=None)
 #print(df)
 
 #Take channel 0 only and convert to a list
