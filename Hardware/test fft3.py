@@ -10,7 +10,7 @@ DATA_POINTS = 1000  # Samples
 DURATION = .112  # Seconds
 SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
-filename = 'Samples/uke_3rd_string_0.csv'
+filename = 'Hardware/Samples/11_21_12_50/uke_1st_string_0.csv'
 
 #Use Pandas to read sample csv
 df = pd.read_csv(filename, header=None)
@@ -28,8 +28,8 @@ xf = np.arange(0,501)
 #Plot FFT
 i = np.argmax(abs(yf[22:135])) + 22 # Just use this for less-accurate, naive version
 print(abs(yf[22:135]))
-print("Max: ", i)
-plt.plot(xf[22:135], abs(yf[22:135]))
+print("Max: ", i/.122)
+plt.plot([i/.112 for i in xf[22:135]], abs(yf[22:135]))
 plt.title("File")
 plt.xlabel("Frequency")
 plt.ylabel("Amplitude")
