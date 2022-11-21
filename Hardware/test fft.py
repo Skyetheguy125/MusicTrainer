@@ -11,17 +11,15 @@ DURATION = .112  # Seconds
 SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
 #Use Pandas to read sample csv
-df = pd.read_csv('Hardware/2ndstring.csv', header=None) #G4 / 392 Hz
+df = pd.read_csv('Samples/uke_3rd_string_0.csv', header=None)
 #print(df)
 
 #Take channel 0 only and convert to a list
 result = df[0].tolist()
-#print(result[-1])
+
 
 #Attempt FFT
-N = math.ceil(SAMPLE_RATE * DURATION)
 B = (SAMPLE_RATE / DATA_POINTS)
-B2 = (1 / SAMPLE_RATE)
 yf = fft.rfft(result)
 yf = np.power(np.abs(yf),2) #work with power rather than complex value or magnitude
 yf = [0 if x < 22 or x > 135 else yf[x] for x in range(len(yf))] #zero-out out-of-range frequencies

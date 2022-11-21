@@ -1,43 +1,37 @@
-#https://towardsdatascience.com/music-in-python-2f054deb41f4
-import numpy as np
-from scipy.io import wavfile
+import scipy.fft as fft
+import scipy.signal as signal
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import math
 
+#(SAMPLE_RATE * DURATION) MUST EQUAL DATA_POINTS
+DATA_POINTS = 1000  # Samples
+DURATION = .112  # Seconds
+SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
-def get_piano_notes():
-    # White keys are in Uppercase and black keys (sharps) are in lowercase
-    octave = ['C', 'c', 'D', 'd', 'E', 'F', 'f', 'G', 'g', 'A', 'a', 'B']
-    base_freq = 440  # Frequency of Note A4
-    keys = np.array([x + str(y) for y in range(0, 9) for x in octave])
-    # Trim to standard 88 keys
-    start = np.where(keys == 'A0')[0][0]
-    end = np.where(keys == 'C8')[0][0]
-    keys = keys[start:end + 1]
+filename = 'Samples/uke_3rd_string_0.csv'
 
-    note_freqs = dict(zip(keys, [2 ** ((n + 1 - 49) / 12) * base_freq for n in range(len(keys))]))
-    note_freqs[''] = 0.0  # stop
-    return note_freqs
+#Use Pandas to read sample csv
+df = pd.read_csv(filename, header=None)
+#print(df)
 
-def get_sine_wave(frequency, duration, sample_rate=44100, amplitude=4096):
-    t = np.linspace(0, duration, int(sample_rate*duration)) # Time axis
-    wave = amplitude*np.sin(2*np.pi*frequency*t)
-    return wave
+#Take channel 0 only and convert to a list
+result = df[0].tolist()
 
-# Get middle C frequency
-note_freqs = get_piano_notes()
-frequency = note_freqs['C4']
+#Stuff
+B = (SAMPLE_RATE / DATA_POINTS)
+yf = fft.rfft(result)
+xf = np.arange(0,501)
+#xf = xf * B
 
-# Pure sine wave
-sine_wave = get_sine_wave(frequency, duration=2, amplitude=2048)
-wavfile.write('pure_c.wav', rate=44100, data=sine_wave.astype(np.int16))
-
-# Load data from wav file
-sample_rate, middle_c = wavfile.read('pure_c.wav')
-
-# Plot sound wave
-plt.plot(middle_c[500:2500])
-plt.xlabel('Time')
-plt.ylabel('Amplitude')
-plt.title('Sound Wave of Pure C')
+#Plot FFT
+i = np.argmax(abs(yf[22:135])) + 22 # Just use this for less-accurate, naive version
+print(abs(yf[22:135]))
+print("Max: ", i)
+plt.plot(xf[22:135], abs(yf[22:135]))
+plt.title("File")
+plt.xlabel("Frequency")
+plt.ylabel("Amplitude")
 plt.grid()
 plt.show()
