@@ -13,30 +13,14 @@
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-  double start = millis();
-  int sensorData[500];
-
-  for (int i = 0; i < 500; i++) {
-    int sensorValue = analogRead(A0);
-    sensorData[i] = sensorValue;
-    // Serial.print(sensorValue);
-    // Serial.print(",");
-  }
-
-  double end = millis();
-
-  for (int i = 0; i < 500; i++) {
-    Serial.print(sensorData[i]);
-    Serial.print(",");
-  }
-
-  Serial.println(end - start);
-
-  delay(100000000000);
-
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(A0);
+  // print out the value you read:
+  Serial.println(sensorValue);
+  // delay(1);  // delay loop to adjust sample rate
 }
