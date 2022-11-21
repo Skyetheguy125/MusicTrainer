@@ -12,7 +12,7 @@ def test_fft(file):
 	SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
 	#Use Pandas to read sample csv
-	df = pd.read_csv('Hardware/Samples/{}'.format(file), header=None)
+	df = pd.read_csv('Hardware/3k_uke/{}'.format(file), header=None)
 	#print(df)
 
 	#Take channel 0 only and convert to a list
@@ -44,7 +44,7 @@ def test_fft(file):
 	#print(yf)
 
 if __name__=="__main__":
-	files = os.listdir("Hardware/Samples/11_21_12_50")
+	files = os.listdir("Hardware/3k_uke")
 	for f in files:
 		print(f)
-		test_fft("11_21_12_50/"+f)
+		test_fft(f)
