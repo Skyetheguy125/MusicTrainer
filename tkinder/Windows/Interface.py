@@ -7,12 +7,23 @@ from MainScaffold import ProtectedBuffer
 
 def change_image(image_name,image=None):
     try:
-        new_img=ImageTk.PhotoImage(Image.open(image_name))
+        t_image = Image.open(image_name)
+        im_resized = t_image.crop((0,30,t_image.width,t_image.height-50))
+        (width, height) = (int(float(im_resized.width) // 1.5), int(float(im_resized.height) // 1.5))
+        im_resized = im_resized.resize((width, height))
+        new_img=ImageTk.PhotoImage(im_resized)
     except FileNotFoundError as e:
         image_name = 'tkinder/Windows/images/'+tuner_clef+'/staff.png'
         print("FileNotFoundError [{errno}]: {errstr} \"{filename}\"".format(errno=e.errno,errstr=e.strerror,filename=e.filename))
-        new_img=ImageTk.PhotoImage(Image.open(image_name))
+        t_image = Image.open(image_name)
+        im_resized = t_image.crop((0,30,t_image.width,t_image.height-50))
+
+        (width, height) = (int(float(im_resized.width) // 1.5), int(float(im_resized.height) // 1.5))
+        im_resized = im_resized.resize((width, height))
+        new_img=ImageTk.PhotoImage(im_resized)
+    
     image.configure(image=new_img)
+
     image.image=new_img
 
 #Allows clef-changing as an independent operation inside a lambda expression
