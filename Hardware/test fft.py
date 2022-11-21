@@ -7,11 +7,11 @@ import math
 
 #(SAMPLE_RATE * DURATION) MUST EQUAL DATA_POINTS
 DATA_POINTS = 1000  # Samples
-DURATION = .112  # Seconds
+DURATION = .335  # Seconds
 SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
 #Use Pandas to read sample csv
-df = pd.read_csv('Samples/uke_3rd_string_0.csv', header=None)
+df = pd.read_csv('Samples/uke_3rd_string_1.csv', header=None)
 #print(df)
 
 #Take channel 0 only and convert to a list
@@ -30,8 +30,10 @@ yf = [0 if fence_low <= i <= fence_high else i for i in yf] #if the value is an 
 xf = np.arange(0,501)
 xf = xf * B
 
+i = np.argmax(np.abs(yf[22:135])) + 22
+
 #Plot FFT
-plt.plot(xf[22:147], np.abs(yf[22:147]))
+plt.plot(xf[22:135], np.abs(yf[22:135]))
 plt.title("Test FFT 1")
 plt.xlabel("Frequency")
 plt.ylabel("Amplitude")

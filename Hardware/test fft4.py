@@ -34,7 +34,7 @@ def freq_from_HPS(sig, fs):
 
 #(SAMPLE_RATE * DURATION) MUST EQUAL DATA_POINTS
 DATA_POINTS = 1000  # Samples
-DURATION = .112  # Seconds
+DURATION = .335  # Seconds
 SAMPLE_RATE = (DATA_POINTS / DURATION)  # Hertz
 
 #Use Pandas to read sample csv
