@@ -3,6 +3,8 @@ This is a scaffold main script for running GUI threads alongside scaffolded Sign
 """
 import threading
 from SignalProcessorScaffold import SigProcessorScaffold as sp
+from FFT_Scaffold import FFT_Scaffold as FFT_sp
+
 import tkinder.Windows.Interface as Interface
 
 class ProtectedBuffer:
@@ -40,12 +42,12 @@ kill_signal.set(-1.0)
 
 #Function for the signal thread; simulates the signal processor
 def signal_thread():
-	sig = sp(range=(65.4,1046.5))
+	sig = FFT_sp()
 	while kill_signal.get() < 0:
 		signal_buffer.set(sig.wait_and_read())
 
 def trainer_thread():
-	target = sp(1000,(65.4,1046.5))
+	target = FFT_sp(1000,(65.4,1046.5))
 	while kill_signal.get() < 0:
 		target_buffer.set(target.wait_and_read())
 
