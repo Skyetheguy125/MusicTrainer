@@ -24,6 +24,7 @@ class FFT_Scaffold:
 	def _signalReader(self):
 		"""returns a signal by reading the csv that is updated"""
 		while True:
+			# sleep(.1)
 			# df = pd.read_csv('Hardware/3k_uke/uke_4th_string_4.csv', header=None)
 			files = os.listdir("Hardware/3k_uke")
 			ran_file = choice(files)
@@ -44,7 +45,11 @@ class FFT_Scaffold:
 			# plt.plot(xf, np.abs(yf))
 			# plt.plot(filtered)
 			# plt.plot(result)
-			self._last_value = xf[np.argmax(yf)]
+			fund_freq=xf[np.argmax(yf)]
+			print(fund_freq)
+			self._last_value = fund_freq
+			# print(ran_file)
+
 			yield self._last_value
 
 	def wait_and_read(self):	
