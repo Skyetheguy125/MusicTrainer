@@ -37,7 +37,7 @@ class FFT_Scaffold:
 			# result = result[:500]
 			# print(len(result))
 			#print(result[-1])
-			sos = signal.butter(10, [240,1200], 'bp', fs=3000, output='sos')
+			sos = signal.butter(10, [200,1200], 'bp', fs=3000, output='sos')
 			filtered = signal.sosfilt(sos, result)
 			yf = rfft(filtered)
 			xf = rfftfreq(1000, 1 / self.SAMPLE_RATE)
