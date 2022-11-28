@@ -2,6 +2,7 @@ import scipy.fft as fft
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy import signal
 import pandas as pd
 import os
 
@@ -21,7 +22,9 @@ def test_fft(file):
 
 	#Attempt FFT
 	B = (SAMPLE_RATE / DATA_POINTS)
-	yf = fft.rfft(result)
+	sos = signal.butter(10, [200,1200], 'bp', fs=3000, output='sos')
+	filtered = signal.sosfilt(sos, result)
+	yf = fft.rfft(filtered)
 	yf = np.power(np.abs(yf),2) #work with power rather than complex value or magnitude
 	yf = [0 if x < 22 or x > 135 else yf[x] for x in range(len(yf))] #zero-out out-of-range frequencies
 	q1,q3 = np.percentile(yf[22:135], [25,75]) #find quartiles for in-range frequencies
@@ -30,7 +33,7 @@ def test_fft(file):
 	#fence_low = q1 - (1.5 * iqr) #statistical cutoff for outliers (low end)
 	yf1 = [0 if i <= fence_high else i for i in yf] #if the value is an outlier, keep it; otherwise, zero it
 	xf = np.arange(0,len(yf))
-	xf = xf * B
+	xf = fft.rfftfreq(1000, 1 / SAMPLE_RATE)
 	#print(xf)
 	plt.plot(xf, yf) #plot all data in range
 	plt.plot(xf,yf1) #plot only outliers in range (overlaid)
@@ -41,6 +44,7 @@ def test_fft(file):
 	plt.ylabel("Amplitude")
 	plt.grid()
 	plt.show()
+	print(xf[np.argmax(yf)])
 	#print(yf)
 
 if __name__=="__main__":

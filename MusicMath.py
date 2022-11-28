@@ -57,6 +57,7 @@ def note_lookup(note, accid={}, *, oct=False):
 		"F-sharp" if accid.get("F-sharp") else "G-flat",	#9
 		"G",	#10
 		"G-sharp" if accid.get("G-sharp") else "A-flat"]	#11
+	
 	if not oct:	
 		return LUT[note%12]
 	else:
