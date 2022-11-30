@@ -54,14 +54,17 @@ def create_page(window):
     window.grid_rowconfigure(2, weight=2)
     window.grid_columnconfigure(3, weight=2)   
 
-def create_welcome_window(_signal_buf: ProtectedBuffer = None, _target_buf: ProtectedBuffer = None):
+def create_welcome_window(_signal_buf: ProtectedBuffer = None, _target_buf: ProtectedBuffer = None, _match_signal: ProtectedBuffer = None):
     global welcome_window
     global signal_buf
     global target_buf
+    global match_signal
     if _signal_buf is not None:
         signal_buf = _signal_buf
     if _target_buf is not None:
         target_buf = _target_buf
+    if _match_signal is not None:
+        match_signal = _match_signal
         
     #Creating default window. Sizing, background and buttons
     welcome_window = Tk()
@@ -230,6 +233,9 @@ def create_trainer_window():
 
         deviation = mm.cent_deviation(actual_value,target_note)
         stringbuf.set(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents') #updates to the label's textvariable automatically display on the label
+        if abs(deviation) <= 15:
+            count = match_signal.get() + 0.1
+            match_signal.set(count)
         
         if len(training_data) < 20:
             training_data.append(( "+" if deviation > 0 else "") + str(round(deviation,1)) + ' cents')
