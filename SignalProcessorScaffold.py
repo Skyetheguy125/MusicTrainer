@@ -63,6 +63,43 @@ class SigProcessorScaffold:
 		else:
 			return self._last_value
 
+class SmartSignalScaffold(SigProcessorScaffold):
+	"""
+	Simulates a signal processor being fed an input that is controlled, i.e. that attempts to reach a given reference value.
+	"""
+	def __init__(self, refBuf, delay=10, range=(0,5000),rate=0.1):
+		"""
+		delay - in miliseconds, the minimum time between generations of new output values
+		range - any 2-element indexable object, where range[0] is the lowest value and range[1] the highest value for the output
+		refBuf - buffer for interthread communication, carries the current reference (target) value
+		rate - Speed at which the controller adjusts (proportional constant)
+		"""
+		self.delay = delay
+		self.range = range
+		self.rate = rate
+		self._referenceBuffer = refBuf
+		self._signal = self._signalGenerator()
+		self._last_yield = 0
+		self._last_value = uniform(self.range[0], self.range[1])
+		self._last_err = 0
+	
+	def _next_value(self,r):
+		"""calculates the next value, given a reference value"""
+		Kp, Kd = self.rate, 0
+		err = self._last_value - r
+		#print(err)
+		return self._last_value - Kp*err - Kd*(err-self._last_err)
+	
+	def _signalGenerator(self):
+		while True:
+			now = time()
+			r = self._referenceBuffer.get()
+			if(now-self._last_yield < self.delay/1000):
+				sleep(self.delay/1000-(now-self._last_yield))
+			self._last_yield = time()
+			self._last_value = self._next_value(r)
+			#print(r,self._last_value)
+			yield self._last_value
 
 if __name__=="__main__":
 	#Use examples
