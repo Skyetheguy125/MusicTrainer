@@ -27,7 +27,7 @@ class FFT_Scaffold:
 		ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 		ser.reset_input_buffer()
 		while True:
-			# sleep(.1)
+			# sleep(.1)git add
 			# df = pd.read_csv('Hardware/3k_uke/uke_4th_string_4.csv', header=None)
 			# files = os.listdir("Hardware/3k_uke")
 			# ran_file = choice(files)
@@ -65,7 +65,7 @@ class FFT_Scaffold:
 			# plt.plot(result)
 			fund_freq=xf[np.argmax(yf)]
 			# print(fund_freq)
-			self._last_value = fund_freq - 110 
+			self._last_value = fund_freq
 			# print(ran_file)
 
 			yield self._last_value
