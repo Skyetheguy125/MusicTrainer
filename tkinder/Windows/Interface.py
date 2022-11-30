@@ -200,7 +200,7 @@ def create_trainer_window():
     off_by_label = Label(trainer_window,text='Note off by: ',font=("Arial",10,'bold'),bd=2,relief='solid',padx=2,pady=1).grid(row=2,column=4,padx=5)
 
     #adds temporary image for target note
-    target_file = "tkinder/Windows/images/sample2.png"
+    target_file = "tkinder/Windows/images/treble/A4.png"
     target_image = PhotoImage(file=target_file)
     image_target = Label(trainer_window,image=target_image,bd=3,relief='solid',padx=5)
     image_target.grid(row=2,column=2) 
