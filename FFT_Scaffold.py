@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import os
 from random import choice
+import serial
 
 
 class FFT_Scaffold:
@@ -17,7 +18,8 @@ class FFT_Scaffold:
 		range - any 2-element indexable object, where range[0] is the lowest value and range[1] the highest value for the output
 		"""
 		self._signal = self._signalReader()
-		self._last_yield = 0
+		self.list_of_values = self._SerialReader()
+		self._last_list = []
 		self._last_value = None
 		self.DATA_POINTS = 1000  # Samples 
 		self.SAMPLE_RATE = 3000  # Hertz
@@ -28,19 +30,20 @@ class FFT_Scaffold:
 			# df = pd.read_csv('Hardware/3k_uke/uke_4th_string_4.csv', header=None)
 			files = os.listdir("Hardware/3k_uke")
 			ran_file = choice(files)
-			print(ran_file)
+			# print(ran_file)
 			df = pd.read_csv('Hardware/3k_uke/{}'.format(ran_file), header=None)
 
 			#print(df)
 			#Take channel 0 only and convert to a list
-			result = df[0].tolist()
+			# result = df[0].tolist()  #SIMULATED DATA
+			result=self._last_list #REALTIME DATA
 			# result = result[:500]
 			# print(len(result))
 			#print(result[-1])
-			sos = signal.butter(10, [200,1200], 'bp', fs=3000, output='sos')
+			sos = signal.butter(10, [200,1100], 'bp', fs=3000, output='sos')
 			filtered = signal.sosfilt(sos, result)
 			yf = rfft(filtered)[10:]
-			xf = rfftfreq(1000, 1 / self.SAMPLE_RATE)[10:]
+			xf = rfftfreq(self.DATA_POINTS, 1 / self.SAMPLE_RATE)[10:]
 			# xf = xf[:]
 			# plt.plot(xf, np.abs(yf))
 			# plt.plot(filtered)
@@ -57,6 +60,27 @@ class FFT_Scaffold:
 		returns a fresh output value. If it is too soon to generate a new value, waits (i.e. hangs/sleeps) until a new one can be generated, then outputs it.
 		"""
 		return next(self._signal)
+	
+	def _SerialReader(self):
+			ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+			ser.reset_input_buffer()
+
+			while True:
+				Temp_list=[]
+				numSamples = 0
+				# start = time.monotonic()
+				while numSamples < self.DATA_POINTS:
+					if ser.in_waiting > -0:
+						line = ser.readline().rstrip()
+						decodeLine = line.decode('UTF-8',errors='ignore')
+						numSamples += 1
+						if (not decodeLine.isdigit()):
+							decodeLine = 0
+						Temp_list.append(decodeLine)
+				self._last_list = Temp_list
+				yield self._last_list
+
+					# csvwriter.writerow(decodeLine)
 
 
 # if __name__=="__main__":
