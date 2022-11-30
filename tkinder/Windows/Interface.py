@@ -151,7 +151,7 @@ def create_home_window():
         IMG_Name=mm.note_lookup(note,oct=True)
         change_note_image(IMG_Name)
         
-        after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
+        after_id.set(root.after(500, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
     #Run window
     display_deviation() #start the ongoing background function
@@ -238,10 +238,13 @@ def create_trainer_window():
         #Automatic Note updating image
         IMG_Name=mm.note_lookup(actual_note,oct=True)
         change_actual_image(IMG_Name)
-        IMG_Name=mm.note_lookup(target_note,oct=True)
-        change_target_image(IMG_Name)
         
-        after_id.set(root.after(50, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
+        if abs(deviation) < 300:
+            IMG_Name=mm.note_lookup(target_note,oct=True)
+            change_target_image(IMG_Name)
+
+        
+        after_id.set(root.after(500, display_deviation)) #recursively call this function in a new thread after 50 ms (non-blocking/responsive infinite loop)
     
     #Run window
     display_deviation() #start the ongoing background function
