@@ -47,7 +47,8 @@ match_signal.set(0.0)
 
 #Function for the signal thread; simulates the signal processor
 def signal_thread():
-	sig = ssp(reference_buffer,10,(261.63,1046.5))
+	sig = FFT_sp()
+	# sig = ssp(reference_buffer,10,(261.63,1046.5))
 	while kill_signal.get() < 0:
 		signal_buffer.set(sig.wait_and_read())
 

@@ -13,16 +13,16 @@ from random import choice
 #(SAMPLE_RATE * DURATION) MUST EQUAL DATA_POINTS
 DATA_POINTS = 10000  # Samples
 # DURATION = .112  # Seconds
-SAMPLE_RATE = 3000  # Hertz
+SAMPLE_RATE = 2365  # Hertz
 
 #Use Pandas to read sample csv
-df = pd.read_csv('Hardware/10k_sample/uke_1st_string_1.csv', header=None)
-df1 = pd.read_csv('Hardware/10k_sample/uke_1st_string_3.csv', header=None)
+df = pd.read_csv('Hardware/10k_sample/uke_1st_string_2.csv', header=None)
+df1 = pd.read_csv('Hardware/10k_sample/uke_1st_string_0.csv', header=None)
 
 #print(df)
 files = os.listdir("Hardware/3k_uke")
 ran_file = choice(files)
-print(ran_file)
+# print(ran_file)
 #Take channel 0 only and convert to a list
 result = df[0].tolist()
 result1 = df1[0].tolist()

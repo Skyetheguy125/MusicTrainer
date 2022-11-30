@@ -19,8 +19,8 @@ class FFT_Scaffold:
 		"""
 		self._signal = self._signalReader()
 		self._last_value = None
-		self.DATA_POINTS = 5000  # Samples 
-		self.SAMPLE_RATE = 3000  # Hertz
+		self.DATA_POINTS = 3000  # Samples 
+		self.SAMPLE_RATE = 2400  # Hertz
 		
 	def _signalReader(self):
 		"""returns a signal by reading the csv that is updated"""
