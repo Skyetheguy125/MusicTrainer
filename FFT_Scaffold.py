@@ -19,10 +19,11 @@ class FFT_Scaffold:
 		"""
 		self._signal = self._signalReader()
 		self.list_of_values = self._SerialReader()
-		self._last_list = []
+		self._last_list = [0]*1000
 		self._last_value = None
 		self.DATA_POINTS = 1000  # Samples 
 		self.SAMPLE_RATE = 3000  # Hertz
+		
 	def _signalReader(self):
 		"""returns a signal by reading the csv that is updated"""
 		while True:
@@ -30,7 +31,7 @@ class FFT_Scaffold:
 			# df = pd.read_csv('Hardware/3k_uke/uke_4th_string_4.csv', header=None)
 			files = os.listdir("Hardware/3k_uke")
 			ran_file = choice(files)
-			# print(ran_file)
+			print(ran_file)
 			df = pd.read_csv('Hardware/3k_uke/{}'.format(ran_file), header=None)
 
 			#print(df)
