@@ -47,7 +47,7 @@ def signal_thread():
 		signal_buffer.set(sig.wait_and_read())
 
 def trainer_thread():
-	target = sp(1000,(65.4,1046.5))
+	target = sp(2000,(261.63,1046.5))
 	while kill_signal.get() < 0:
 		target_buffer.set(target.wait_and_read())
 
