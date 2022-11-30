@@ -18,29 +18,43 @@ class FFT_Scaffold:
 		range - any 2-element indexable object, where range[0] is the lowest value and range[1] the highest value for the output
 		"""
 		self._signal = self._signalReader()
-		self.list_of_values = self._SerialReader()
-		self._last_list = [0]*1000
 		self._last_value = None
-		self.DATA_POINTS = 1000  # Samples 
+		self.DATA_POINTS = 5000  # Samples 
 		self.SAMPLE_RATE = 3000  # Hertz
 		
 	def _signalReader(self):
 		"""returns a signal by reading the csv that is updated"""
+		ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+		ser.reset_input_buffer()
 		while True:
 			# sleep(.1)
 			# df = pd.read_csv('Hardware/3k_uke/uke_4th_string_4.csv', header=None)
-			files = os.listdir("Hardware/3k_uke")
-			ran_file = choice(files)
-			print(ran_file)
-			df = pd.read_csv('Hardware/3k_uke/{}'.format(ran_file), header=None)
+			# files = os.listdir("Hardware/3k_uke")
+			# ran_file = choice(files)
+			# # print(ran_file)
+			# df = pd.read_csv('Hardware/3k_uke/{}'.format(ran_file), header=None)
 
 			#print(df)
-			#Take channel 0 only and convert to a list
+			
+			Temp_list=[]
+			numSamples = 0
+			# start = time.monotonic()
+			while numSamples < self.DATA_POINTS:
+				if ser.in_waiting > -0:
+					line = ser.readline().rstrip()
+					decodeLine = line.decode('UTF-8',errors='ignore')
+					numSamples += 1
+					# print(decodeLine)
+					if (not decodeLine.isdigit()):
+						decodeLine = 0
+					Temp_list.append(int(decodeLine))
+
 			# result = df[0].tolist()  #SIMULATED DATA
-			result=self._last_list #REALTIME DATA
+			result=Temp_list #REALTIME DATA
 			# result = result[:500]
 			# print(len(result))
 			#print(result[-1])
+			# if(len(result)<self.DATA_POINTS))
 			sos = signal.butter(10, [200,1100], 'bp', fs=3000, output='sos')
 			filtered = signal.sosfilt(sos, result)
 			yf = rfft(filtered)[10:]
@@ -50,8 +64,8 @@ class FFT_Scaffold:
 			# plt.plot(filtered)
 			# plt.plot(result)
 			fund_freq=xf[np.argmax(yf)]
-			print(fund_freq)
-			self._last_value = fund_freq
+			# print(fund_freq)
+			self._last_value = fund_freq - 110 
 			# print(ran_file)
 
 			yield self._last_value
@@ -62,24 +76,24 @@ class FFT_Scaffold:
 		"""
 		return next(self._signal)
 	
-	def _SerialReader(self):
-			ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-			ser.reset_input_buffer()
+	# def _SerialReader(self):
+	# 		ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+	# 		ser.reset_input_buffer()
 
-			while True:
-				Temp_list=[]
-				numSamples = 0
-				# start = time.monotonic()
-				while numSamples < self.DATA_POINTS:
-					if ser.in_waiting > -0:
-						line = ser.readline().rstrip()
-						decodeLine = line.decode('UTF-8',errors='ignore')
-						numSamples += 1
-						if (not decodeLine.isdigit()):
-							decodeLine = 0
-						Temp_list.append(decodeLine)
-				self._last_list = Temp_list
-				yield self._last_list
+	# 		while True:
+	# 			Temp_list=[]
+	# 			numSamples = 0
+	# 			# start = time.monotonic()
+	# 			while numSamples < self.DATA_POINTS:
+	# 				if ser.in_waiting > -0:
+	# 					line = ser.readline().rstrip()
+	# 					decodeLine = line.decode('UTF-8',errors='ignore')
+	# 					numSamples += 1
+	# 					if (not decodeLine.isdigit()):
+	# 						decodeLine = 0
+	# 					Temp_list.append(decodeLine)
+	# 			self._last_list = Temp_list
+	# 			yield self._last_list
 
 					# csvwriter.writerow(decodeLine)
 
