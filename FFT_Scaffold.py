@@ -19,15 +19,15 @@ class FFT_Scaffold:
 		"""
 		self._signal = self._signalReader()
 		self._last_value = None
-		self.DATA_POINTS = 3000  # Samples 
-		self.SAMPLE_RATE = 2400  # Hertz
+		self.DATA_POINTS = 1000  # Samples 
+		self.SAMPLE_RATE = 3000  # Hertz
 		
 	def _signalReader(self):
 		"""returns a signal by reading the csv that is updated"""
 		ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 		ser.reset_input_buffer()
 		while True:
-			# sleep(.1)
+			# sleep(.1)git add
 			# df = pd.read_csv('Hardware/3k_uke/uke_4th_string_4.csv', header=None)
 			# files = os.listdir("Hardware/3k_uke")
 			# ran_file = choice(files)
@@ -55,7 +55,7 @@ class FFT_Scaffold:
 			# print(len(result))
 			#print(result[-1])
 			# if(len(result)<self.DATA_POINTS))
-			sos = signal.butter(10, [200,1100], 'bp', fs=3000, output='sos')
+			sos = signal.butter(10, [200,1100], 'bp', fs=self.SAMPLE_RATE, output='sos')
 			filtered = signal.sosfilt(sos, result)
 			yf = rfft(filtered)[10:]
 			xf = rfftfreq(self.DATA_POINTS, 1 / self.SAMPLE_RATE)[10:]
@@ -65,7 +65,7 @@ class FFT_Scaffold:
 			# plt.plot(result)
 			fund_freq=xf[np.argmax(yf)]
 			# print(fund_freq)
-			self._last_value = fund_freq - 110 
+			self._last_value = fund_freq
 			# print(ran_file)
 
 			yield self._last_value
