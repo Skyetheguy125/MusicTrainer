@@ -19,8 +19,8 @@ class FFT_Scaffold:
 		"""
 		self._signal = self._signalReader()
 		self._last_value = None
-		self.DATA_POINTS = 3000  # Samples 
-		self.SAMPLE_RATE = 2400  # Hertz
+		self.DATA_POINTS = 1000  # Samples 
+		self.SAMPLE_RATE = 3000  # Hertz
 		
 	def _signalReader(self):
 		"""returns a signal by reading the csv that is updated"""
@@ -55,7 +55,7 @@ class FFT_Scaffold:
 			# print(len(result))
 			#print(result[-1])
 			# if(len(result)<self.DATA_POINTS))
-			sos = signal.butter(10, [200,1100], 'bp', fs=3000, output='sos')
+			sos = signal.butter(10, [200,1100], 'bp', fs=self.SAMPLE_RATE, output='sos')
 			filtered = signal.sosfilt(sos, result)
 			yf = rfft(filtered)[10:]
 			xf = rfftfreq(self.DATA_POINTS, 1 / self.SAMPLE_RATE)[10:]
